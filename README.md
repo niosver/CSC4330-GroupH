@@ -1,5 +1,6 @@
 # README
 
+https://docs.google.com/document/d/1wcqRdzffat8AI4cNuwbFtHgJrsrXMfr_R5Zs-ofxBh8/edit?usp=sharing
 ## Milestone 1
 
 - Story or Scenario
