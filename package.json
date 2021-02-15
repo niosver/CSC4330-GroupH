@@ -1,0 +1,20 @@
+{
+  "name": "bikeapp",
+  "version": "1.0.0",
+  "description": "https://docs.google.com/document/d/1wcqRdzffat8AI4cNuwbFtHgJrsrXMfr_R5Zs-ofxBh8/edit?usp=sharing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "cd frontend && npm i && cd../backend && npm i"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/niosver/CSC4330-GroupH.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/niosver/CSC4330-GroupH/issues"
+  },
+  "homepage": "https://github.com/niosver/CSC4330-GroupH#readme"
+}
