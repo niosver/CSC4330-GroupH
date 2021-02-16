@@ -35,7 +35,7 @@ CREATE TABLE Transaction(
 CREATE TABLE Account(
     username VARCHAR(50),
     password VARCHAR(60), //bcrypt generates 60 character long hashes
-    account_type VARCHAR(20) NOT NULL CHECK (account_type IN ('customer','manager','owner')),
+    account_type ENUM('owner','manager','customer'),
     customer_id INT NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
     PRIMARY KEY(username),
