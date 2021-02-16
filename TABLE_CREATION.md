@@ -12,14 +12,16 @@ CREATE TABLE Customer(
     address VARCHAR(100),
     birthdate DATE NOT NULL,
     email VARCHAR(100),
-    cc_info VARCHAR(100) NOT NULL,              //possibly change on how we recognize CC info
+    cc_number VARCHAR(16) NOT NULL,
+    cc_name VARCHAR(100) NOT NULL,
+    billing_address VARCHAR(100) NOT NULL,              
     PRIMARY KEY (customer_id),
 );
 
 CREATE TABLE Transaction(
     transaction_id INT AUTO_INCREMENT,
     price INT NOT NULL,
-    cc_info VARCHAR(100) NOT NULL,              //possibly change on how we recognize CC info
+    cc_number VARCHAR(16) NOT NULL,              
     transaction_date DATE NOT NULL,
     customer_id INT NOT NULL,
     origin_dock INT NOT NULL,
