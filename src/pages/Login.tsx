@@ -7,9 +7,9 @@ import React from 'react';
 import { useForm, UseFormMethods } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import { UserCreation, userCreationSchema, UserLogin, userLoginSchema } from 'types/User';
-import { useAuth } from '../AuthContext';
-import { SignInForm } from '../components/SignInForm';
-import { SignUpForm } from '../components/SignUpForm';
+import { useAuth } from 'hooks/AuthContext';
+import { SignInForm } from 'components/SignInForm';
+import { SignUpForm } from 'components/SignUpForm';
 
 const useStyles = makeStyles((theme) => ({
     paper: {

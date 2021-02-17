@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import './App.css';
-import { AuthContext, useAuth } from './AuthContext';
-import { Home } from './pages/Home';
-import { Login } from './pages/Login';
+import { AuthContext, useAuth } from './hooks/AuthContext';
+import { Home } from 'pages/Home';
+import { Login } from 'pages/Login';
 
 type AuthGuardProps = {
     Component: React.FC;
