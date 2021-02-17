@@ -1,35 +1,11 @@
-import React from 'react';
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-import './App.css';
-import { AuthContext, useAuth } from './hooks/AuthContext';
+import { AuthGuard } from 'auth/AuthGuard';
 import { Home } from 'pages/Home';
 import { Login } from 'pages/Login';
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import './App.css';
+import { AuthContext, useAuth } from './auth/AuthContext';
 
-type AuthGuardProps = {
-    Component: React.FC;
-    path: string;
-};
-const AuthGuard: React.FC<AuthGuardProps> = (props) => {
-    const { Component, path } = props;
-    const auth = useAuth();
-    return (
-        <Route
-            path={path}
-            render={({ location }) =>
-                auth.user ? (
-                    <Component />
-                ) : (
-                    <Redirect
-                        to={{
-                            pathname: '/login',
-                            state: { from: location },
-                        }}
-                    />
-                )
-            }
-        />
-    );
-};
 const App: React.FC = () => {
     const auth = useAuth();
     return (
@@ -39,7 +15,9 @@ const App: React.FC = () => {
                     <Route exact path="/">
                         <Login />
                     </Route>
-                    <AuthGuard path="/home" Component={Home} />
+                    <AuthGuard path="/home">
+                        <Home />
+                    </AuthGuard>
                 </Switch>
             </Router>
         </AuthContext.Provider>
