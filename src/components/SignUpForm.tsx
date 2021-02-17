@@ -10,8 +10,23 @@ import { UserCreation, UserLogin } from 'types/User';
 /* TODO
     
 */
-export const SignUpForm: React.FC<Props<UserCreation, UserLogin>> = (props) => {
-    const { formMethod, onSubmit, classes, setState } = props;
+
+/**
+ * @description Sign-up form component that renders account creation fields and maps the appropriate
+ * props from passed from Login to the form onSubmit prop
+ *
+ * @todo
+ * - implement auth signup methods
+ * - update input fields to match expected data
+ *      - birthday -> date picker
+ *      - phone number -> number only field
+ *      - implement error for existing account
+ *
+ * Adapted from:
+ * @link {https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in}
+ */
+export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (props) => {
+    const { formMethod, onSubmit, classes } = props;
     const { handleSubmit, errors, register } = formMethod;
     return (
         <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
@@ -95,13 +110,6 @@ export const SignUpForm: React.FC<Props<UserCreation, UserLogin>> = (props) => {
             >
                 Sign Up
             </Button>
-            <Grid container>
-                <Grid item>
-                    <Link variant="body2" onClick={() => setState({ signIn: true })}>
-                        Already have an account? Sign In
-                    </Link>
-                </Grid>
-            </Grid>
         </form>
     );
 };

@@ -1,15 +1,17 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Grid, Link } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
+import { useAuth } from 'auth/AuthContext';
+import { SignInForm } from 'components/SignInForm';
+import { SignUpForm } from 'components/SignUpForm';
 import React from 'react';
 import { useForm, UseFormMethods } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
+import { LoginState } from 'types/Login';
 import { UserCreation, userCreationSchema, UserLogin, userLoginSchema } from 'types/User';
-import { useAuth } from 'hooks/AuthContext';
-import { SignInForm } from 'components/SignInForm';
-import { SignUpForm } from 'components/SignUpForm';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -30,14 +32,11 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(3, 0, 2),
     },
 }));
-type LoginState = {
-    signIn: boolean;
-    submission: {
-        count: number;
-        status: number;
-        message: string;
-    };
-};
+/**
+ * Controller component for sign-in and sign-up forms. Manages state for which form should be rendered
+ * and submission count/status/response. Maps corresponding zod resolver to appropriate form and defines
+ * submission handler for both forms.
+ */
 export const Login: React.FC = () => {
     const history = useHistory();
     const auth = useAuth();
@@ -46,7 +45,10 @@ export const Login: React.FC = () => {
         signIn: true,
         submission: { count: 0, status: 0, message: '' },
     });
-
+    const loginMessage = {
+        signIn: "Don't have an account? Sign Up",
+        signUp: 'Already have an account? Sign In',
+    };
     const signInFormMethod: UseFormMethods<UserLogin> = useForm({
         resolver: zodResolver(userLoginSchema),
     });
@@ -83,7 +85,6 @@ export const Login: React.FC = () => {
                         formMethod={signInFormMethod}
                         classes={classes}
                         onSubmit={onSubmit}
-                        setState={setState}
                         state={state}
                     />
                 ) : (
@@ -91,9 +92,23 @@ export const Login: React.FC = () => {
                         formMethod={signUpFormMethod}
                         classes={classes}
                         onSubmit={onSubmit}
-                        setState={setState}
                     />
                 )}
+                <Grid container>
+                    <Grid item>
+                        <Link
+                            variant="body2"
+                            onClick={() =>
+                                setState((prevState) => ({
+                                    signIn: !prevState.signIn,
+                                    submission: prevState.submission,
+                                }))
+                            }
+                        >
+                            {state.signIn ? loginMessage.signIn : loginMessage.signUp}
+                        </Link>
+                    </Grid>
+                </Grid>
             </div>
             <Box mt={8} />
         </Container>
