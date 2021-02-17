@@ -1,27 +1,27 @@
-import React from 'react';
-import Link from '@material-ui/core/Link';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Title from './Title';
+import Link from "@material-ui/core/Link";
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import React from "react";
+import Title from "./Title";
 
 // Generate Order Data
 function createData(id: number, dockNumber: number, address: string) {
-  return { id, dockNumber, address};
+  return { id, dockNumber, address };
 }
 
 const rows = [
-  createData(0, 1, '12345 Nutty Avenue'),
-  createData(1, 2, '4421 Pillar Street'),
-  createData(2, 3, '5560 Candycane Lane'),
-  createData(3, 4, '21234 Billy Jean Road'),
-  createData(4, 5, '2134 Bruce Springsteen Road'),
+  createData(0, 1, "12345 Nutty Avenue"),
+  createData(1, 2, "4421 Pillar Street"),
+  createData(2, 3, "5560 Candycane Lane"),
+  createData(3, 4, "21234 Billy Jean Road"),
+  createData(4, 5, "2134 Bruce Springsteen Road"),
 ];
 
-function preventDefault(event: { preventDefault: () => void; }) {
+function preventDefault(event: { preventDefault: () => void }) {
   event.preventDefault();
 }
 
