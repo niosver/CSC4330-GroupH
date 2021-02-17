@@ -100,8 +100,11 @@ const useStyles = makeStyles((theme) => ({
         height: 240,
     },
 }));
-
-export const Home: React.FC = () => {
+type Props = {
+    children: React.ReactNode;
+};
+export const Dashboard: React.FC<Props> = (props) => {
+    const { children } = props;
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const handleDrawerOpen = () => {
@@ -163,6 +166,15 @@ export const Home: React.FC = () => {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
+                {/* BEGIN temporary email + sign-out button */}
+                <Container maxWidth="lg" className={classes.container}>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <Paper className={classes.paper}>{children}</Paper>
+                        </Grid>
+                    </Grid>
+                </Container>
+                {/* END */}
                 <Container maxWidth="lg" className={classes.container}>
                     <Grid container spacing={3}>
                         {/* Recent Orders */}

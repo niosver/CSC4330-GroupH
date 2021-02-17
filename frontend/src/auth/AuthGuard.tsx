@@ -14,11 +14,11 @@ export const AuthGuard: React.FC<AuthGuardProps> = (props) => {
             path={path}
             render={({ location }) =>
                 auth.user ? (
-                    { children }
+                    children
                 ) : (
                     <Redirect
                         to={{
-                            pathname: '/login',
+                            pathname: '/',
                             state: { from: location },
                         }}
                     />
