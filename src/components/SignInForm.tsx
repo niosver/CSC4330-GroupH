@@ -6,30 +6,11 @@ import Link from '@material-ui/core/Link';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import { UseFormMethods } from 'react-hook-form/dist/types/form';
+import { LoginChildProps, LoginState } from 'types/Login';
 import { UserCreation, UserLogin } from 'types/User';
 
-type LoginState = {
-    signIn: boolean;
-    submission: {
-        count: number;
-        status: number;
-        message: string;
-    };
-};
-type Props<T, U> = {
-    formMethod: UseFormMethods<T>;
-    onSubmit: (data: T | U) => void;
-    classes: any;
-    setState: React.Dispatch<React.SetStateAction<LoginState>>;
-    state: LoginState;
-};
-export const SignInForm: React.FC<Props<UserLogin, UserCreation>> = (props) => {
-    const { formMethod, onSubmit, classes, setState, state } = props;
-    const { handleSubmit, errors, register, formState } = formMethod;
-    React.useEffect(() => {
-        console.log(state);
-    }, [state]);
+type SignInProps = LoginChildProps<UserLogin, UserCreation> & { state: LoginState };
+
     return (
         <form className={classes.form} onSubmit={handleSubmit(onSubmit, undefined)}>
             <Typography component="h1" variant="h5">

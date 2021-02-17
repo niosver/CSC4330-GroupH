@@ -1,27 +1,14 @@
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import { UseFormMethods } from 'react-hook-form/dist/types/form';
+import { LoginChildProps } from 'types/Login';
 import { UserCreation, UserLogin } from 'types/User';
 
-//TODO: update and extract
-type Props<T, U> = {
-    formMethod: UseFormMethods<T>;
-    onSubmit: (data: T | U) => void;
-    classes: any;
-    setState: any;
-};
 /* TODO
-    - implement auth signup methods
-    - update input fields to match expected data
-        - birthday -> date picker
-        - phone number -> number only field
-    - implement error for existing account
+    
 */
 export const SignUpForm: React.FC<Props<UserCreation, UserLogin>> = (props) => {
     const { formMethod, onSubmit, classes, setState } = props;
