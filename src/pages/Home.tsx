@@ -1,4 +1,4 @@
-import { useAuth } from 'hooks/AuthContext';
+import { useAuth } from 'auth/AuthContext';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
