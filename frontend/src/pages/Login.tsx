@@ -1,99 +1,116 @@
-import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Grid, Link } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { makeStyles } from '@material-ui/core/styles';
+import { useAuth } from 'auth/AuthContext';
+import { SignInForm } from 'components/SignInForm';
+import { SignUpForm } from 'components/SignUpForm';
+import React from 'react';
+import { useForm, UseFormMethods } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
+import { LoginState } from 'types/Login';
+import { UserCreation, userCreationSchema, UserLogin, userLoginSchema } from 'types/User';
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
 }));
-
+/**
+ * Controller component for sign-in and sign-up forms. Manages state for which form should be rendered
+ * and submission count/status/response. Maps corresponding zod resolver to appropriate form and defines
+ * submission handler for both forms.
+ */
 export const Login: React.FC = () => {
-  const classes = useStyles();
+    const history = useHistory();
+    const auth = useAuth();
+    const classes = useStyles();
+    const [state, setState] = React.useState<LoginState>({
+        signIn: true,
+        submission: { count: 0, status: 0, message: '' },
+    });
+    const loginMessage = {
+        signIn: "Don't have an account? Sign Up",
+        signUp: 'Already have an account? Sign In',
+    };
+    const signInFormMethod: UseFormMethods<UserLogin> = useForm({
+        resolver: zodResolver(userLoginSchema),
+    });
+    const signUpFormMethod: UseFormMethods<UserCreation> = useForm({
+        resolver: zodResolver(userCreationSchema),
+    });
+    const onSubmit = async (data: UserLogin | UserCreation) => {
+        console.log(data);
+        if (state.signIn) {
+            const status = await auth.signIn(data, () => history.push('/home'));
+            if (!status) {
+                setState((prevState) => ({
+                    signIn: prevState.signIn,
+                    submission: {
+                        count: prevState.submission.count + 1,
+                        status: 401,
+                        message: 'Incorrect username or password',
+                    },
+                }));
+            }
+        } else {
+            // TODO
+            // auth.signUp(data, () => history.push('/home'));
+        }
+    };
 
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={8}>
-      </Box>
-    </Container>
-  );
-}
+    return (
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+
+            <div className={classes.paper}>
+                {state.signIn ? (
+                    <SignInForm
+                        formMethod={signInFormMethod}
+                        classes={classes}
+                        onSubmit={onSubmit}
+                        state={state}
+                    />
+                ) : (
+                    <SignUpForm
+                        formMethod={signUpFormMethod}
+                        classes={classes}
+                        onSubmit={onSubmit}
+                    />
+                )}
+                <Grid container>
+                    <Grid item>
+                        <Link
+                            variant="body2"
+                            onClick={() =>
+                                setState((prevState) => ({
+                                    signIn: !prevState.signIn,
+                                    submission: prevState.submission,
+                                }))
+                            }
+                        >
+                            {state.signIn ? loginMessage.signIn : loginMessage.signUp}
+                        </Link>
+                    </Grid>
+                </Grid>
+            </div>
+            <Box mt={8} />
+        </Container>
+    );
+};
