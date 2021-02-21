@@ -6,6 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
@@ -21,6 +22,11 @@ import { mainListItems, secondaryListItems } from '../components/listItems';
 import Orders from '../components/Orders';
 
 const drawerWidth = 240;
+
+
+function preventDefault(event: { preventDefault: () => void }) {
+    event.preventDefault();
+}
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -141,7 +147,7 @@ export const Dashboard: React.FC<Props> = (props) => {
                         Dashboard
                     </Typography>
                     <IconButton color="inherit">
-                        <Badge badgeContent={4} color="secondary">
+                        <Badge badgeContent={1} color="secondary">
                             <NotificationsIcon />
                         </Badge>
                     </IconButton>
@@ -177,7 +183,7 @@ export const Dashboard: React.FC<Props> = (props) => {
                 {/* END */}
                 <Container maxWidth="lg" className={classes.container}>
                     <Grid container spacing={3}>
-                        {/* Recent Orders */}
+                        {/* Docks */}
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
                                 <Orders />
@@ -185,7 +191,9 @@ export const Dashboard: React.FC<Props> = (props) => {
                         </Grid>
                     </Grid>
                     <Box pt={4}>
-                        <div>About us</div>
+                        <Link color="primary" href="#" onClick={preventDefault}>
+                            About us
+                        </Link>
                     </Box>
                 </Container>
             </main>
