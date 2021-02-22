@@ -1,7 +1,6 @@
 import util from "util";
 import mysql from "mysql";
-import sqlConfig from "./sqlinterface";
-
+import sqlConfig from "./sqlinterface"
 function makeDb( config: sqlConfig ) {
     const connection = mysql.createConnection(config);
     return {
@@ -25,6 +24,10 @@ function makeDb( config: sqlConfig ) {
         },
         rollback() {
             return util.promisify(connection.rollback)
+                .call(connection)
+        },
+        ping() {
+            return util.promisify(connection.ping)
                 .call(connection)
         }
     };
