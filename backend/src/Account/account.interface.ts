@@ -1,4 +1,4 @@
-enum Account_Type {
+export enum Account_Type {
     customer = "customer",
     manager = "manager",
     owner = "owner"
