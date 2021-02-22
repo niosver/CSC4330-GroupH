@@ -16,6 +16,11 @@ const config: sqlConfig = {
 }
 
 const db = makeDb(config);
+app.locals.db = db;
+
+setInterval(async () => {
+    await db.ping()
+},1000);
 
 app.use('/accounts', accounts);
 
