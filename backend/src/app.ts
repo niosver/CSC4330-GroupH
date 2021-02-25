@@ -1,11 +1,16 @@
-import express from "express";
+import express, { Request, Response } from 'express';
+import { Logger, RequestLogger } from './Logger';
+
 const app = express();
 const port = process.env.PORT || 8000;
 
-app.get('/', (req,res) => {
-    res.send('Test');
+app.use(RequestLogger());
+
+app.get('/api/hello', (_req: Request, res: Response) => {
+  res.send('hello!');
 });
 
 app.listen(port, () => {
-    console.log(`Sever running on port ${port}`)
+  const message = `Sever running on port ${port}`;
+  Logger.log(message);
 });
