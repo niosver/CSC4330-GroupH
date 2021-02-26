@@ -1,8 +1,9 @@
-import express from "express";
+import express from "express"
 import makeDb from "./mysqlpromisify"
 import sqlConfig from "./sqlinterface"
 import dotenv from "dotenv"
 import accounts from "./Account/account.service"
+import customers from "./Customer/customer.service"
 
 dotenv.config()
 const app = express();
@@ -23,6 +24,8 @@ setInterval(async () => {
 },1000);
 
 app.use('/accounts', accounts);
+
+app.use("/customer",customers)
 
 app.listen(port, () => {
     console.log(`Sever running on port ${port}`)
