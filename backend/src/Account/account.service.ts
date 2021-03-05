@@ -75,5 +75,15 @@ router.get('/login', async function(req,res) {
     }
 });
 
+router.post('/logout', async function(req,res) {
+    try {
+        req.session.destroy(function(err) {
+            res.status(200).send("OK");
+        });
+    }
+    catch {
+        res.status(400).send("Error logging out");
+    }
+});
 
 export default router
