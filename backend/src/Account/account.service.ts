@@ -6,11 +6,12 @@ import { Logger } from "../Logger";
 
 const saltRounds = 10;
 const router = express.Router();
-const create_customer = "INSERT INTO Customer(?,?,?,?,?,?,?,?)";
-const create_account = "INSERT INTO Account(?,?,?,?)";
-const check_account_type = "SELECT account_type FROM Account WHERE username = ?";
-const check_login = "SELECT Count(*) FROM Account WHERE username = ? AND password = ?";
-const get_customer_id = "SELECT customer_id FROM Account WHERE username = ?";
+
+const create_customer = "INSERT INTO Customer (firstname,lastname,address,birthdate,email,cc_number,cc_name,billing_address) VALUES(?,?,?,?,?,?,?,?);";
+const create_account = "INSERT INTO Account VALUES(?,?,?,?);";
+const check_account_type = "SELECT account_type FROM Account WHERE username = ?;";
+const check_login = "SELECT Count(*) FROM Account WHERE username = ? AND password = ?;";
+const get_customer_id = "SELECT customer_id FROM Account WHERE username = ?;";
 /**
  * @todo Troubleshoot:
  * {
@@ -58,7 +59,7 @@ router.post("/signup", async function (req, res, next) {
 			newC.billing_address,
 		]);
 		let p_hash = await bcrypt.hash(json.password, saltRounds);
-		let newA = new Account(json.username, p_hash, Account_Type.customer, customer.customer_id);
+		let newA = new Account(json.username, p_hash, Account_Type.customer, customer.insertId);
 		await db.query(create_account, [
 			newA.username,
 			newA.password,
