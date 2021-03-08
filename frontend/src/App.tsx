@@ -10,7 +10,7 @@ import { AuthContext, useAuth } from './auth/AuthContext';
 const App: React.FC = () => {
     const auth = useAuth();
     const config: FetchConfig = {
-        url: './api/hello',
+        url: './hello',
         method: 'GET',
     };
     const response = useFetch<string>(config);

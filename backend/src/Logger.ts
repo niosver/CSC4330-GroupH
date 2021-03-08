@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
 
-export type LogLevel = 'INFO' | 'ERROR';
+export type LogLevel = 'INFO' | 'ERROR' | 'WARN';
 /**
  * Static class for displaying log level and time prepended to message.
  *
@@ -14,6 +14,7 @@ export type LogLevel = 'INFO' | 'ERROR';
  */
 export class Logger {
   public static INFO: 'INFO' = 'INFO';
+  public static WARN: 'WARN' = 'WARN';
   public static ERROR: 'ERROR' = 'ERROR';
 
   /**
@@ -37,7 +38,13 @@ export class Logger {
    */
   static log(message: string, level: LogLevel = this.INFO) {
     const time = this.getTime();
-    const _level = level == this.INFO ? chalk.blue(level) : chalk.red(level);
+    /* info = blue | warn = yellow | error = red */
+    const _level =
+      level == this.INFO
+        ? chalk.blue(level)
+        : this.WARN
+        ? chalk.yellow(level)
+        : chalk.red(level);
     console.log(`[${_level}]  ${time}  ${message}`);
   }
 }

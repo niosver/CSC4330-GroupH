@@ -18,8 +18,16 @@ dotenv.config();
 const app = express();
 const TWO_HOURS = 1000 * 60 * 60 * 2;
 
+/* Applies logger middleware to routes */
 app.use(RequestLogger());
+
+/* Test route for client */
+app.get('/hello', (_req, res) => {
+  res.send('hello!');
+});
+
 app.use(
+  '/api',
   session({
     //@ts-ignore
     secret: process.env.SECRET,
@@ -48,15 +56,17 @@ setInterval(async () => {
   await db.ping();
 }, 1000);
 
-/* Test route for client */
-app.get('/hello', (_req, res) => {
-  res.send('hello!');
-});
-app.use('/accounts', accounts);
+app.use('/api/accounts', accounts);
 
-app.use('/customer', customers);
+app.use('/api/customer', customers);
 
 app.listen(port, () => {
-  const message = `Sever running on port ${port}`;
-  Logger.log(message);
+  Logger.log(`Sever running on port ${port}`);
+  /* client uses port 3000 sets proxy for server at port 8000 in development environment */
+  if (port != 8000) {
+    Logger.log(
+      'Running client/server concurrently in development requires server port set to 8000',
+      Logger.WARN
+    );
+  }
 });
