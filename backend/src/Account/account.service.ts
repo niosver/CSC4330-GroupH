@@ -5,11 +5,11 @@ import bcrypt from "bcrypt";
 
 const saltRounds = 10;
 var router = express.Router();
-const create_customer = "INSERT INTO Customer(?,?,?,?,?,?,?,?)"
-const create_account = "INSERT INTO Account(?,?,?,?)"
-const check_account_type = "SELECT account_type FROM Account WHERE username = ?"
-const check_login = 'SELECT Count(*) FROM Account WHERE username = ? AND password = ?'
-const get_customer_id = "SELECT customer_id FROM Account WHERE username = ?"
+const create_customer = "INSERT INTO Customer (firstname,lastname,address,birthdate,email,cc_number,cc_name,billing_address) VALUES(?,?,?,?,?,?,?,?);";
+const create_account = "INSERT INTO Account VALUES(?,?,?,?);";
+const check_account_type = "SELECT account_type FROM Account WHERE username = ?;";
+const check_login = "SELECT Count(*) FROM Account WHERE username = ? AND password = ?;";
+const get_customer_id = "SELECT customer_id FROM Account WHERE username = ?;";
 
 router.post('/signup', async function(req,res) {
     let db = req.app.locals.db;

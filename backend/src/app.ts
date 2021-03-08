@@ -46,7 +46,7 @@ setInterval(async () => {
 
 app.use('/accounts', accounts);
 
-app.use("/customer",customers)
+app.use("/customer",customers);
 
 app.listen(port, () => {
     console.log(`Sever running on port ${port}`)
