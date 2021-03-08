@@ -12,8 +12,8 @@ const create_account = "INSERT INTO Account VALUES(?,?,?,?);";
 const check_account_type = "SELECT account_type FROM Account WHERE username = ?;";
 const check_login = "SELECT Count(*) FROM Account WHERE username = ? AND password = ?;";
 const get_customer_id = "SELECT customer_id FROM Account WHERE username = ?;";
-const unique_email = "SELECT Count(*) FROM Customer WHERE email = ?;";
-const unique_username = "SELECT Count(*) FROM Account WHERE username = ?;";
+const unique_email = "SELECT Count(*) AS count FROM Customer WHERE email = ?;";
+const unique_username = "SELECT Count(*) As count FROM Account WHERE username = ?;";
 
 router.post("/signup", async function (req, res, next) {
 	let db = req.app.locals.db;
@@ -21,11 +21,11 @@ router.post("/signup", async function (req, res, next) {
 	Logger.log(json);
 	try {
         let unique = await db.query(unique_email,[json.email]);
-        if(unique > 0) {
+        if(unique[0].count > 0) {
             res.status(400).send("Account with that email already exists");
         }
         unique = await db.query(unique_username,[json.username]);
-        if(unique > 0) {
+        if(unique[0].count > 0) {
             res.status(400).send("Account with that email already exists");
         }
 		await db.beginTransaction();
