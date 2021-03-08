@@ -60,8 +60,21 @@ export const Login: React.FC = () => {
     });
     const onSubmit = async (data: UserLogin | UserCreation) => {
         console.log(data);
+        if (!state.signIn) {
+            const status = await auth.signUp(data as UserCreation);
+            if (!status) {
+                setState((prevState) => ({
+                    signIn: prevState.signIn,
+                    submission: {
+                        count: prevState.submission.count + 1,
+                        status: 401,
+                        message: 'Error',
+                    },
+                }));
+            }
+        }
         if (state.signIn) {
-            const status = await auth.signIn(data, () => history.push('/home'));
+            const status = await auth.signIn(data as UserLogin, () => history.push('/home'));
             if (!status) {
                 setState((prevState) => ({
                     signIn: prevState.signIn,

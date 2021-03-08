@@ -79,11 +79,11 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
                 fullWidth
                 id="firstName"
                 label="First Name"
-                name="firstName"
+                name="first_name"
                 autoComplete="given-name"
                 inputRef={register}
             />
-            <span className={classes.error}>{errors.firstName?.message}</span>
+            <span className={classes.error}>{errors.first_name?.message}</span>
             <TextField
                 variant="outlined"
                 margin="normal"
@@ -91,11 +91,11 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
                 fullWidth
                 id="lastName"
                 label="Last Name"
-                name="lastName"
+                name="last_name"
                 autoComplete="family-name"
                 inputRef={register}
             />
-            <span className={classes.error}>{errors.lastName?.message}</span>
+            <span className={classes.error}>{errors.last_name?.message}</span>
             <TextField
                 variant="outlined"
                 margin="normal"
@@ -126,7 +126,7 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
                 margin="normal"
                 required
                 fullWidth
-                name="birthDate"
+                name="birthdate"
                 id="birthDate"
                 defaultValue="1980-01-01"
                 autoComplete="bday"
@@ -136,7 +136,7 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
                     shrink: true,
                 }}
             />
-            <span className={classes.error}>{errors.birthDate?.message}</span>
+            <span className={classes.error}>{errors.birthdate?.message}</span>
 
             <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}

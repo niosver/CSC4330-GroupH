@@ -14,7 +14,6 @@ const App: React.FC = () => {
         method: 'GET',
     };
     const response = useFetch<string>(config);
-    console.log('env=', process.env.NODE_ENV);
     return (
         <AuthContext.Provider value={auth}>
             <Router>
