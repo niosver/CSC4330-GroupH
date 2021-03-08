@@ -12,32 +12,18 @@ const create_account = "INSERT INTO Account VALUES(?,?,?,?);";
 const check_account_type = "SELECT account_type FROM Account WHERE username = ?;";
 const check_login = "SELECT Count(*) FROM Account WHERE username = ? AND password = ?;";
 const get_customer_id = "SELECT customer_id FROM Account WHERE username = ?;";
-/**
- * @todo Troubleshoot:
- * {
- *   "error": {
- *       "code": "ER_PARSE_ERROR",
- *       "errno": 1064,
- *       "sqlMessage": "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''John','Doe','123 N. Madeup St.','1979-12-31 18:00:00.000','user1@email.com','41' at line 1",
- *       "sqlState": "42000",
- *       "index": 0,
- *       "sql": "INSERT INTO Customer('John','Doe','123 N. Madeup St.','1979-12-31 18:00:00.000','user1@email.com','411111111111111','John Doe','123 N. Madeup St.')"
- *    }
- * }
- */
+const unique_email = "SELECT Count(*) FROM Customer WHERE email = ?;";
+
 router.post("/signup", async function (req, res, next) {
 	let db = req.app.locals.db;
 	let json = req.body;
 	Logger.log(json);
 	try {
+        let unique = await db.query(unique_email,[json.email]);
+        if(unique > 0) {
+            res.status(400).send("Account with that email already exists");
+        }
 		await db.beginTransaction();
-		/* not sure how you want to implement but client will need to know if the account already exists */
-		// const check_account_exists = "SELECT customer_id FROM Account WHERE username = ?";
-		// const account = await db.query(check_account_exists, [json.email]);
-		// if (account) {
-		// 	res.status(200).send("Account with that email already exists");
-		//  next();
-		// }
 		let newC = new Customer(
 			json.first_name,
 			json.last_name,
