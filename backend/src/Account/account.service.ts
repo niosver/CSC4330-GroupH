@@ -13,7 +13,7 @@ const check_account_type = "SELECT account_type FROM Account WHERE username = ?;
 const check_login = "SELECT Count(*) FROM Account WHERE username = ? AND password = ?;";
 const get_customer_id = "SELECT customer_id FROM Account WHERE username = ?;";
 const unique_email = "SELECT Count(*) FROM Customer WHERE email = ?;";
-const unique_username = "SELECT Count(*) FROM Customer WHERE username = ?;";
+const unique_username = "SELECT Count(*) FROM Account WHERE username = ?;";
 
 router.post("/signup", async function (req, res, next) {
 	let db = req.app.locals.db;
