@@ -23,10 +23,12 @@ router.post("/signup", async function (req, res, next) {
         let unique = await db.query(unique_email,[json.email]);
         if(unique[0].count > 0) {
             res.status(400).send("Account with that email already exists");
+            return next();
         }
         unique = await db.query(unique_username,[json.username]);
         if(unique[0].count > 0) {
             res.status(400).send("Account with that username already exists");
+            return next();
         }
 		await db.beginTransaction();
 		let newC = new Customer(
