@@ -7,10 +7,6 @@ import React from 'react';
 import { LoginChildProps } from 'types/Login';
 import { UserCreation, UserLogin } from 'types/User';
 
-/* TODO
-    
-*/
-
 /**
  * @description Sign-up form component that renders account creation fields and maps the appropriate
  * props from passed from Login to the form onSubmit prop
@@ -18,21 +14,25 @@ import { UserCreation, UserLogin } from 'types/User';
  * @todo
  * - implement auth signup methods
  * - update input fields to match expected data
- *      - birthday -> date picker
  *      - phone number -> number only field
- *      - implement error for existing account
+ * - implement error for existing account
  *
  * Adapted from:
  * @link {https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in}
+ *
+ * Autocomplete reference
+ * @link {https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#attr-fe-autocomplete-name}
  */
 export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (props) => {
     const { formMethod, onSubmit, classes } = props;
     const { handleSubmit, errors, register } = formMethod;
+
     return (
         <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
             <Typography component="h1" variant="h5">
                 Sign Up
             </Typography>
+
             <TextField
                 variant="outlined"
                 margin="normal"
@@ -45,7 +45,7 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
                 autoFocus
                 inputRef={register}
             />
-            <p color="red">{errors.email?.message}</p>
+            <span className={classes.error}>{errors.email?.message}</span>
             <TextField
                 variant="outlined"
                 margin="normal"
@@ -55,10 +55,47 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 inputRef={register}
             />
-            <p color="red">{errors.password?.message}</p>
+            <span className={classes.error}>{errors.password?.message}</span>
+            <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                id="confirmPassword"
+                autoComplete="new-password"
+                inputRef={register}
+            />
+            <span className={classes.error}>{errors.confirmPassword?.message}</span>
+            <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="firstName"
+                label="First Name"
+                name="first_name"
+                autoComplete="given-name"
+                inputRef={register}
+            />
+            <span className={classes.error}>{errors.first_name?.message}</span>
+            <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                name="last_name"
+                autoComplete="family-name"
+                inputRef={register}
+            />
+            <span className={classes.error}>{errors.last_name?.message}</span>
             <TextField
                 variant="outlined"
                 margin="normal"
@@ -70,7 +107,7 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
                 autoComplete="address"
                 inputRef={register}
             />
-            <p color="red">{errors.address?.message}</p>
+            <span className={classes.error}>{errors.address?.message}</span>
             <TextField
                 variant="outlined"
                 margin="normal"
@@ -79,22 +116,27 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
                 id="phoneNumber"
                 label="Phone Number"
                 name="phoneNumber"
-                autoComplete="phone"
+                autoComplete="tel-national"
+                type="tel"
                 inputRef={register}
             />
-            <p color="red">{errors.phoneNumber?.message}</p>
+            <span className={classes.error}>{errors.phoneNumber?.message}</span>
             <TextField
                 variant="outlined"
                 margin="normal"
                 required
                 fullWidth
-                id="birthday"
-                label="Birthday"
-                name="birthday"
-                autoComplete="birthday"
+                name="birthdate"
+                id="birthDate"
+                defaultValue="1980-01-01"
+                autoComplete="bday"
                 inputRef={register}
+                type="date"
+                InputLabelProps={{
+                    shrink: true,
+                }}
             />
-            <p color="red">{errors.birthday?.message}</p>
+            <span className={classes.error}>{errors.birthdate?.message}</span>
 
             <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
