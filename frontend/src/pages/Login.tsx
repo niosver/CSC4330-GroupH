@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    error: {
+        color: '#f44336',
+    },
 }));
 /**
  * Controller component for sign-in and sign-up forms. Manages state for which form should be rendered
