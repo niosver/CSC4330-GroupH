@@ -13,11 +13,13 @@ const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 /** Validation object for user */
 export const userSchema = z.object({
     id: z.number().positive(),
+    firstName: z.string().min(1),
+    lastName: z.string().min(1),
     role: z.enum([UserRole.Admin, UserRole.Owner, UserRole.Manager, UserRole.Customer]),
     email: z.string().email(),
     password: z.string().min(8).max(16),
     address: z.string(),
-    birthday: z.date(),
+    birthDate: z.string().transform(z.date(), (val) => new Date(val)),
     // takes input as string -> validates against regex -> transforms to number for server
     phoneNumber: z
         .string()
@@ -26,11 +28,17 @@ export const userSchema = z.object({
     creditCard: z.number().optional(), // validation might be too complex
 });
 /** Validation object for new user */
-export const userCreationSchema = userSchema.omit({
-    id: true,
-    creditCard: true,
-    role: true,
-});
+export const userCreationSchema = userSchema
+    .omit({
+        id: true,
+        creditCard: true,
+        role: true,
+    })
+    .extend({ confirmPassword: z.string().min(8).max(16) })
+    .refine((schema) => schema.password == schema.confirmPassword, {
+        message: "Passwords don't match",
+        path: ['confirmPassword'],
+    });
 /** Validation object for adding new credit card */
 export const userAddNewCreditCard = userSchema.pick({ creditCard: true });
 /** Validation object for existing user login */

@@ -27,17 +27,21 @@ class Auth implements IAuth {
     private validUsers: UserPublic[] = [
         {
             id: 1,
+            firstName: 'John',
+            lastName: 'Doe',
             email: 'user1@email.com',
             address: 'address1',
-            birthday: new Date(Date.now()),
+            birthDate: new Date(Date.now()),
             phoneNumber: 2251234567,
             role: UserRole.Customer,
         },
         {
             id: 2,
+            firstName: 'Jane',
+            lastName: 'Doe',
             email: 'user2@email.com',
             address: 'address2',
-            birthday: new Date(Date.now()),
+            birthDate: new Date(Date.now()),
             phoneNumber: 2257651234,
             role: UserRole.Customer,
         },
