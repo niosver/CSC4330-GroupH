@@ -10,7 +10,7 @@ export const Home: React.FC = () => {
 
     const temp = (user: UserPublic) => (
         <>
-            <h1>{user!.email}</h1>
+            <h1>{user!.username}</h1>
             <Button
                 color="secondary"
                 type="button"

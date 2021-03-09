@@ -2,30 +2,26 @@ import { AuthGuard } from 'auth/AuthGuard';
 import { Home } from 'pages/Home';
 import { Login } from 'pages/Login';
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { useFetch, FetchConfig } from 'UseFetch';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import './App.css';
 import { AuthContext, useAuth } from './auth/AuthContext';
 
 const App: React.FC = () => {
     const auth = useAuth();
-    const config: FetchConfig = {
-        url: './hello',
-        method: 'GET',
-    };
-    const response = useFetch<string>(config);
+    const history = useHistory();
+    React.useEffect(() => {
+        auth.init(() => history.push('./home'));
+    }, []);
     return (
         <AuthContext.Provider value={auth}>
-            <Router>
-                <Switch>
-                    <Route exact path="/">
-                        <Login />
-                    </Route>
-                    <AuthGuard path="/home">
-                        <Home />
-                    </AuthGuard>
-                </Switch>
-            </Router>
+            <Switch>
+                <Route exact path="/">
+                    <Login />
+                </Route>
+                <AuthGuard path="/home">
+                    <Home />
+                </AuthGuard>
+            </Switch>
         </AuthContext.Provider>
     );
 };
