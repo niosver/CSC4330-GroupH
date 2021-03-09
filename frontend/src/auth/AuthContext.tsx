@@ -9,7 +9,7 @@ import { FetchConfig, useFetch } from 'UseFetch';
 interface IAuth {
     user: UserPublic | null;
     signIn(userLogin: UserLogin, callback: () => void): Promise<boolean>;
-    signOut(callback: () => void): boolean;
+    signOut(callback: () => void): Promise<boolean>;
 }
 
 /**
@@ -18,42 +18,33 @@ interface IAuth {
  *
  * @todo
  * - Implement handling of different views e.g. customer, manager, owner
- * - Implement request/request-handling to backend api
- * - Implement global storage (cache, cookies, or token)?
- * - Implement sign-up method
+ * - Implement backend sign-up method
+ * - Implement error handling
+ * - Refactor to Auth to return component and use hook: UseFetch
  */
 class Auth implements IAuth {
     public user: UserPublic | null;
 
     /* Temporary placeholder for api */
-    private validUsers: UserPublic[] = [
-        {
-            id: 1,
-            first_name: 'John',
-            last_name: 'Doe',
-            email: 'user1@email.com',
-            address: 'address1',
-            birthdate: new Date(Date.now()),
-            phoneNumber: 2251234567,
-            account_type: UserRole.Customer,
-        },
-        {
-            id: 2,
-            first_name: 'Jane',
-            last_name: 'Doe',
-            email: 'user2@email.com',
-            address: 'address2',
-            birthdate: new Date(Date.now()),
-            phoneNumber: 2257651234,
-            account_type: UserRole.Customer,
-        },
-    ];
+
     /** Initialize authentication object with no user signed-in */
     constructor() {
         /* possibly check cache for cookie/token to initialize with stored user? */
         //this.user = await fetch(cookie_or_token) || null;
 
         this.user = null;
+    }
+    public async init(callback: () => void) {
+        const config: FetchConfig = {
+            url: '/api/accounts/me',
+            method: 'GET',
+            withCredentials: true,
+        };
+        const res = await axios.request<UserPublic>(config);
+        if (res.status == 200) {
+            this.user = res.data;
+            callback();
+        }
     }
     /**
      * Method to sign-in a user into the application by:
@@ -71,27 +62,43 @@ class Auth implements IAuth {
         // const maybeUserPublic = await fetch()
 
         /* temporary placeholder operation for api */
-        const maybeUserPublic: UserPublic | null = await this.validUsers
-            .map((u) => (userLogin.email === u.email ? u : null))
-            .reduce((val) => val);
-        this.user = maybeUserPublic;
-
+        // const maybeUserPublic: UserPublic | null = await this.validUsers
+        //     .map((u) => (userLogin.email === u.email ? u : null))
+        //     .reduce((val) => val);
+        // this.user = maybeUserPublic;
+        const config: FetchConfig = {
+            url: '/api/accounts/login',
+            method: 'POST',
+            data: { ...userLogin },
+            withCredentials: true,
+            xsrfCookieName: 'connect.sid',
+        };
+        const res = await axios.request<UserPublic>(config);
         /* check if api returns valid public user object */
-        if (maybeUserPublic != null) {
-            /* set user object to retrieved user */
-            this.user = maybeUserPublic;
-
-            /* store cookie or token here */
-            // something
-
-            /* invoke callback to route user to user view */
+        if (res.status === 200) {
+            this.user = res.data;
             callback();
-
-            /* signal successful sign-in */
             return true;
         }
-        /* signal failed to sig-in */
+        /* signal failed to sign-in */
         return false;
+
+        // /* check if api returns valid public user object */
+        // if (maybeUserPublic != null) {
+        //     /* set user object to retrieved user */
+        //     this.user = maybeUserPublic;
+
+        //     /* store cookie or token here */
+        //     // something
+
+        //     /* invoke callback to route user to user view */
+        //     callback();
+
+        //     /* signal successful sign-in */
+        //     return true;
+        // }
+        // /* signal failed to sig-in */
+        // return false;
     }
     public async signUp(userCreation: UserCreation): Promise<boolean> {
         /* api operation to be implemented here */
@@ -117,10 +124,23 @@ class Auth implements IAuth {
      * @param callback {() => void} function to be invoked after removing user
      * @returns {true}
      */
-    public signOut(callback: () => void): true {
+    public async signOut(callback: () => void): Promise<boolean> {
         this.user = null;
-        callback();
-        return true;
+        const config: FetchConfig = {
+            url: '/api/accounts/logout',
+            method: 'POST',
+            withCredentials: true,
+        };
+        let success: boolean = false;
+        try {
+            const res = await axios.request(config);
+            success = res.status === 200 ? true : false;
+        } catch (error) {
+            success = false;
+        } finally {
+            callback();
+            return success;
+        }
     }
 }
 const defaultAuthContext = new Auth();
