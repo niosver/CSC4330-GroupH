@@ -51,6 +51,18 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
                 margin="normal"
                 required
                 fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+                inputRef={register}
+            />
+            <span className={classes.error}>{errors.username?.message}</span>
+            <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
                 name="password"
                 label="Password"
                 type="password"

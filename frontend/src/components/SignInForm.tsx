@@ -34,14 +34,14 @@ export const SignInForm: React.FC<SignInProps> = (props) => {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="username"
+                label="username"
+                name="username"
+                autoComplete="username"
                 autoFocus
                 inputRef={register}
             />
-            <p color="red">{errors.email?.message}</p>
+            <p color="red">{errors.username?.message}</p>
             <TextField
                 variant="outlined"
                 margin="normal"

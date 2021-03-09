@@ -1,10 +1,9 @@
 import * as z from 'zod';
 
 export enum UserRole {
-    Admin = 'ADMIN',
-    Owner = 'OWNER',
-    Manager = 'MANAGER',
-    Customer = 'CUSTOMER',
+    Customer = 'customer',
+    Manager = 'manager',
+    Owner = 'owner',
 }
 const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 
@@ -13,9 +12,10 @@ const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 /** Validation object for user */
 export const userSchema = z.object({
     id: z.number().positive(),
+    username: z.string(),
     first_name: z.string().min(1),
     last_name: z.string().min(1),
-    account_type: z.enum([UserRole.Admin, UserRole.Owner, UserRole.Manager, UserRole.Customer]),
+    account_type: z.enum([UserRole.Owner, UserRole.Manager, UserRole.Customer]),
     email: z.string().email(),
     password: z.string().min(8).max(16),
     address: z.string(),
@@ -44,14 +44,13 @@ export const userCreationSchema = userSchema
 /** Validation object for adding new credit card */
 export const userAddNewCreditCard = userSchema.pick({ credit_card: true, billing_address: true });
 /** Validation object for existing user login */
-export const userLoginSchema = userSchema.pick({ email: true, password: true });
+export const userLoginSchema = userSchema.pick({ username: true, password: true });
 /** Validation object for modifying existing user's credentials */
 export const userMutationSchema = userSchema.partial();
 /* private schema for type/interface initialization */
-const _userPublicSchema = userSchema.omit({
-    credit_card: true,
-    password: true,
-    billing_address: true,
+const _userPublicSchema = userSchema.pick({
+    username: true,
+    account_type: true,
 });
 /* TYPES AND INTERFACES */
 /*
