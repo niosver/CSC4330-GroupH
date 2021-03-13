@@ -4,6 +4,7 @@ import sqlConfig from "./sqlinterface";
 import dotenv from "dotenv";
 import accounts from "./Account/account.service";
 import customers from "./Customer/customer.service";
+import transaction from "./Transaction/transaction.service";
 import session from "express-session";
 import { Logger, RequestLogger } from "./Logger";
 import bodyParser from "body-parser";
@@ -12,6 +13,7 @@ declare module "express-session" {
 	export interface SessionData {
 		username: string;
 		customer_id: number;
+		current_transactions: Array<number>;
 	}
 }
 
@@ -66,6 +68,8 @@ app.locals.db = db;
 app.use("/api/accounts", accounts);
 
 app.use("/api/customer", customers);
+
+app.use("/api/transaction", transaction);
 
 app.listen(port, () => {
 	Logger.log(`Sever running on port ${port}`);

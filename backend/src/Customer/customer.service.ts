@@ -8,16 +8,11 @@ const update_customer = "UPDATE Customer SET first_name=?,last_name=?,address=?,
 "cc_number=?,cc_name=?,billing_address=? WHERE customer_id = ?;"
 
 router.put("/update_customer", async function(req,res) {
-    try {
-        let db = req.app.locals.db;
-        
-    }
-    catch {
-
-    }
+    res.send("Not implemented");
 });
 
 router.get("/me", async function(req,res) {
+    
     try {
         let db = req.app.locals.db;
         let results = await db.query(get_customer,[req.session.customer_id]);
