@@ -59,13 +59,21 @@ export const Transaction: React.FC = () => {
         <div className={classes.root}>
             <CssBaseline />
             <Container component="main" className={classes.main} maxWidth="lg">
-                <Typography variant="h4" align="center" component="h1" gutterBottom>
+                <Typography variant="h3" align="center" component="h1" gutterBottom>
                     Bike Transaction
                 </Typography>
-            </Container>
+            </Container> 
+                <Typography variant="h4" align="center" component="h1" gutterBottom>
+                    Fee Agreement
+                </Typography> 
+                <Typography variant="h5" align="center" component="h1" gutterBottom>
+                    This agreement is a contract that sets forth terms as a binding agreement between Dowling Inc.
+                    and the bike user. The list of fees are calculated as such
+                </Typography>
+                
             <Container component="main" className={classes.main} maxWidth="lg">
-                <form className={classes.root} noValidate autoComplete="off">
-                    <div>
+                <form text-align="center" className={classes.root} noValidate autoComplete="off">
+                    <div> 
                         <TextField
                             id="time-rented"
                             select

@@ -19,10 +19,9 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import clsx from 'clsx';
 import React from 'react';
 import { mainListItems, secondaryListItems } from '../components/listItems';
-import Orders from '../components/Orders';
+import Docks from '../components/Docks';
 
 const drawerWidth = 240;
-
 
 function preventDefault(event: { preventDefault: () => void }) {
     event.preventDefault();
@@ -186,7 +185,7 @@ export const Dashboard: React.FC<Props> = (props) => {
                         {/* Docks */}
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
-                                <Orders />
+                                <Docks />
                             </Paper>
                         </Grid>
                     </Grid>
