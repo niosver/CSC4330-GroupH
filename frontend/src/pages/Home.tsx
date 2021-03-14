@@ -2,7 +2,7 @@ import { useAuth } from 'auth/AuthContext';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { UserPublic } from 'types/User';
-import { Dashboard } from './Dashboard';
+import { Dashboard } from 'components/Dashboard';
 import Button from '@material-ui/core/Button';
 export const Home: React.FC = () => {
     const auth = useAuth();

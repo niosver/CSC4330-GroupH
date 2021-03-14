@@ -4,6 +4,9 @@ import './App.css';
 import { AuthProvider, AuthGuard } from 'auth';
 import { Home, Landing, SignIn, SignUp } from 'pages';
 
+import { Dashboard } from './components/Dashboard';
+import { Transaction } from './components/Transaction';
+
 const App: React.FC = () => {
     return (
         <Router>
@@ -21,6 +24,14 @@ const App: React.FC = () => {
                     <AuthGuard path="/home" redirect="/">
                         <Home />
                     </AuthGuard>
+                    {/* DEV ROUTES BEGIN*/}
+                    <Route path="/dashboard">
+                        <Dashboard children={null} />
+                    </Route>
+                    <Route path="/transaction">
+                        <Transaction children={null} />
+                    </Route>
+                    {/* DEV ROUTES END */}
                 </Switch>
             </AuthProvider>
         </Router>
