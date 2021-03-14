@@ -1,13 +1,14 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { useAuth } from './AuthContext';
+import { useAuth } from 'auth';
 
 type AuthGuardProps = {
     children: React.ReactNode;
     path: string;
+    redirect: string;
 };
 export const AuthGuard: React.FC<AuthGuardProps> = (props) => {
-    const { children, path } = props;
+    const { children, path, redirect } = props;
     const auth = useAuth();
     return (
         <Route
@@ -18,7 +19,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = (props) => {
                 ) : (
                     <Redirect
                         to={{
-                            pathname: '/',
+                            pathname: redirect,
                             state: { from: location },
                         }}
                     />
