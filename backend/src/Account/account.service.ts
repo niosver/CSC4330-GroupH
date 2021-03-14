@@ -60,6 +60,7 @@ router.post("/signup", async function (req, res, next) {
 			newA.customer_id,
 		]);
 		req.session.username = newA.username;
+		req.session.customer_id = customer.insertId;
 		db.commit();
 		res.status(200).send("OK");
 	} catch (error) {
@@ -119,9 +120,16 @@ router.get("/login", async function (req, res) {
 
 router.post("/logout", async function (req, res) {
 	try {
-		req.session.destroy(function (err) {
-			res.status(200).send("OK");
-		});
+		if(req.session.username && req.session.customer_id) {
+			res.clearCookie('express_sid');
+			req.session.destroy(()=> {
+				res.status(200).send("OK");
+			});
+		}
+		else {
+			res.status(400).send("Unable to logout");
+		}
+		
 	} catch (error) {
 		res.status(400).send("Error logging out");
 		Logger.log(error, Logger.ERROR);

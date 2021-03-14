@@ -12,14 +12,20 @@ router.put("/update_customer", async function(req,res) {
 });
 
 router.get("/me", async function(req,res) {
-    
     try {
         let db = req.app.locals.db;
         let results = await db.query(get_customer,[req.session.customer_id]);
-        if (results instanceof Customer) {
-            res.status(200).send(results);
-        }
-        else throw Error;
+        let customer = new Customer(
+            results[0].firstname,
+            results[0].lastname,
+            results[0].address,
+            results[0].birthdate,
+            results[0].email,
+            '',
+            '',
+            ''
+        );
+        res.status(200).send(customer);
     }
     catch {
         res.status(400).send("Failed to retrieve correctly formated customer data.");
