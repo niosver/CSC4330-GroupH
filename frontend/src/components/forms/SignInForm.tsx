@@ -4,11 +4,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import { LoginChildProps, LoginState } from 'types/Login';
+import { FormProps, LoginState } from 'types/Login';
 import { UserCreation, UserLogin } from 'types/User';
 
 /** Extends LoginChildProps type to specify property LoginState */
-type SignInProps = LoginChildProps<UserLogin, UserCreation> & { state: LoginState };
+type SignInProps = FormProps<UserLogin>;
 
 /**
  * @description Sign-in form component that renders login fields and maps the appropriate
@@ -18,7 +18,7 @@ type SignInProps = LoginChildProps<UserLogin, UserCreation> & { state: LoginStat
  * @link {https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in}
  */
 export const SignInForm: React.FC<SignInProps> = (props) => {
-    const { formMethod, onSubmit, classes, state } = props;
+    const { formMethod, onSubmit, classes, submissionError } = props;
     const { handleSubmit, errors, register } = formMethod;
     // Log state on change
     // React.useEffect(() => {
@@ -60,9 +60,7 @@ export const SignInForm: React.FC<SignInProps> = (props) => {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
             />
-            {state.submission.count > 0 && state.submission.message ? (
-                <p>{state.submission.message}</p>
-            ) : null}
+            {submissionError != null ? <p>{submissionError}</p> : null}
             <Button
                 type="submit"
                 fullWidth
