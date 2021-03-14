@@ -1,33 +1,29 @@
-import { AuthGuard } from 'auth/AuthGuard';
-import { Home } from 'pages/Home';
-import { Login } from 'pages/Login';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { useFetch, FetchConfig } from 'UseFetch';
 import './App.css';
-import { AuthContext, useAuth } from './auth/AuthContext';
+import { AuthProvider, AuthGuard } from 'auth';
+import { Home, Landing, SignIn, SignUp } from 'pages';
 
 const App: React.FC = () => {
-    const auth = useAuth();
-    const config: FetchConfig = {
-        url: './api/hello',
-        method: 'GET',
-    };
-    const response = useFetch<string>(config);
-    console.log('env=', process.env.NODE_ENV);
     return (
-        <AuthContext.Provider value={auth}>
-            <Router>
+        <Router>
+            <AuthProvider>
                 <Switch>
                     <Route exact path="/">
-                        <Login />
+                        <Landing />
                     </Route>
-                    <AuthGuard path="/home">
+                    <Route path="/signin">
+                        <SignIn />
+                    </Route>
+                    <Route path="/signup">
+                        <SignUp />
+                    </Route>
+                    <AuthGuard path="/home" redirect="/">
                         <Home />
                     </AuthGuard>
                 </Switch>
-            </Router>
-        </AuthContext.Provider>
+            </AuthProvider>
+        </Router>
     );
 };
 export default App;

@@ -8,12 +8,11 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "CommonJs",
+    "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "outDir": "dist"
+    "outDir": "./dist"
   },
-  "include": ["src"]
+  "include": ["./src/*"]
 }

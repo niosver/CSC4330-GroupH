@@ -4,9 +4,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import { LoginChildProps } from 'types/Login';
+import { FormProps } from 'types/Login';
 import { UserCreation, UserLogin } from 'types/User';
 
+type SignUpFormProps = FormProps<UserCreation>;
 /**
  * @description Sign-up form component that renders account creation fields and maps the appropriate
  * props from passed from Login to the form onSubmit prop
@@ -23,10 +24,18 @@ import { UserCreation, UserLogin } from 'types/User';
  * Autocomplete reference
  * @link {https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#attr-fe-autocomplete-name}
  */
-export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (props) => {
+export const SignUpForm: React.FC<SignUpFormProps> = (props) => {
     const { formMethod, onSubmit, classes } = props;
     const { handleSubmit, errors, register } = formMethod;
-
+    const defaultValue = {
+        email: 'user2@email.com',
+        username: 'user2',
+        password: 'password',
+        address: 'address',
+        phoneNumber: '0123456789',
+        firstName: 'first',
+        lastName: 'last',
+    };
     return (
         <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
             <Typography component="h1" variant="h5">
@@ -34,6 +43,7 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
             </Typography>
 
             <TextField
+                defaultValue={defaultValue.email} //test only
                 variant="outlined"
                 margin="normal"
                 required
@@ -47,6 +57,20 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
             />
             <span className={classes.error}>{errors.email?.message}</span>
             <TextField
+                defaultValue={defaultValue.username} //test only
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+                inputRef={register}
+            />
+            <span className={classes.error}>{errors.username?.message}</span>
+            <TextField
+                defaultValue={defaultValue.password} //test only
                 variant="outlined"
                 margin="normal"
                 required
@@ -60,6 +84,7 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
             />
             <span className={classes.error}>{errors.password?.message}</span>
             <TextField
+                defaultValue={defaultValue.password} //test only
                 variant="outlined"
                 margin="normal"
                 required
@@ -73,30 +98,33 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
             />
             <span className={classes.error}>{errors.confirmPassword?.message}</span>
             <TextField
+                defaultValue={defaultValue.firstName} //test only
                 variant="outlined"
                 margin="normal"
                 required
                 fullWidth
                 id="firstName"
                 label="First Name"
-                name="firstName"
+                name="first_name"
                 autoComplete="given-name"
                 inputRef={register}
             />
-            <span className={classes.error}>{errors.firstName?.message}</span>
+            <span className={classes.error}>{errors.first_name?.message}</span>
             <TextField
+                defaultValue={defaultValue.lastName} //test only
                 variant="outlined"
                 margin="normal"
                 required
                 fullWidth
                 id="lastName"
                 label="Last Name"
-                name="lastName"
+                name="last_name"
                 autoComplete="family-name"
                 inputRef={register}
             />
-            <span className={classes.error}>{errors.lastName?.message}</span>
+            <span className={classes.error}>{errors.last_name?.message}</span>
             <TextField
+                defaultValue={defaultValue.address} //test only
                 variant="outlined"
                 margin="normal"
                 required
@@ -109,6 +137,7 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
             />
             <span className={classes.error}>{errors.address?.message}</span>
             <TextField
+                defaultValue={defaultValue.phoneNumber} //test only
                 variant="outlined"
                 margin="normal"
                 required
@@ -126,7 +155,7 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
                 margin="normal"
                 required
                 fullWidth
-                name="birthDate"
+                name="birthdate"
                 id="birthDate"
                 defaultValue="1980-01-01"
                 autoComplete="bday"
@@ -136,7 +165,7 @@ export const SignUpForm: React.FC<LoginChildProps<UserCreation, UserLogin>> = (p
                     shrink: true,
                 }}
             />
-            <span className={classes.error}>{errors.birthDate?.message}</span>
+            <span className={classes.error}>{errors.birthdate?.message}</span>
 
             <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}

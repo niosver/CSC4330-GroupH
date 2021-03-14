@@ -1,10 +1,9 @@
 import * as z from 'zod';
 
 export enum UserRole {
-    Admin = 'ADMIN',
-    Owner = 'OWNER',
-    Manager = 'MANAGER',
-    Customer = 'CUSTOMER',
+    Customer = 'customer',
+    Manager = 'manager',
+    Owner = 'owner',
 }
 const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 
@@ -13,26 +12,29 @@ const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 /** Validation object for user */
 export const userSchema = z.object({
     id: z.number().positive(),
-    firstName: z.string().min(1),
-    lastName: z.string().min(1),
-    role: z.enum([UserRole.Admin, UserRole.Owner, UserRole.Manager, UserRole.Customer]),
+    username: z.string(),
+    first_name: z.string().min(1),
+    last_name: z.string().min(1),
+    account_type: z.enum([UserRole.Owner, UserRole.Manager, UserRole.Customer]),
     email: z.string().email(),
     password: z.string().min(8).max(16),
     address: z.string(),
-    birthDate: z.string().transform(z.date(), (val) => new Date(val)),
+    billing_address: z.string(),
+    birthdate: z.string().transform(z.date(), (val) => new Date(val)),
     // takes input as string -> validates against regex -> transforms to number for server
     phoneNumber: z
         .string()
         .regex(phoneRegex)
         .transform(z.number(), (str) => parseInt(str, 10)),
-    creditCard: z.number().optional(), // validation might be too complex
+    credit_card: z.number().optional(), // validation might be too complex
 });
 /** Validation object for new user */
 export const userCreationSchema = userSchema
     .omit({
         id: true,
-        creditCard: true,
-        role: true,
+        credit_card: true,
+        account_type: true,
+        billing_address: true,
     })
     .extend({ confirmPassword: z.string().min(8).max(16) })
     .refine((schema) => schema.password == schema.confirmPassword, {
@@ -40,13 +42,16 @@ export const userCreationSchema = userSchema
         path: ['confirmPassword'],
     });
 /** Validation object for adding new credit card */
-export const userAddNewCreditCard = userSchema.pick({ creditCard: true });
+export const userAddNewCreditCard = userSchema.pick({ credit_card: true, billing_address: true });
 /** Validation object for existing user login */
-export const userLoginSchema = userSchema.pick({ email: true, password: true });
+export const userLoginSchema = userSchema.pick({ username: true, password: true });
 /** Validation object for modifying existing user's credentials */
 export const userMutationSchema = userSchema.partial();
 /* private schema for type/interface initialization */
-const _userPublicSchema = userSchema.omit({ creditCard: true, password: true });
+const _userPublicSchema = userSchema.pick({
+    username: true,
+    account_type: true,
+});
 /* TYPES AND INTERFACES */
 /*
    types: used for functions/variables
