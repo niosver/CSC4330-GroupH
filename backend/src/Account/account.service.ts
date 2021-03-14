@@ -148,7 +148,7 @@ router.get("/me", async function (req, res, next) {
 router.post("/logout", async function (req, res) {
 	try {
 		req.session.destroy(function (_err) {
-			res.status(200).send("OK");
+			res.status(200).cookie("connect.sid", 0, { maxAge: -1, httpOnly: true }).send();
 		});
 	} catch (error) {
 		res.status(400).send("Error logging out");
