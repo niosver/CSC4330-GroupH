@@ -12,6 +12,7 @@ declare module "express-session" {
 	export interface SessionData {
 		username: string;
 		customer_id: number;
+		account_type: string;
 	}
 }
 
