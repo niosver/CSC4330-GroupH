@@ -1,13 +1,14 @@
+import { AuthGuard, AuthProvider } from 'auth';
+import { Landing, SignIn, SignUp } from 'pages';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
-import { AuthProvider, AuthGuard } from 'auth';
-import { Home, Landing, SignIn, SignUp } from 'pages';
-
-import { Dashboard } from './components/Dashboard';
-import { Transaction } from './components/Transaction';
+import { Dashboard } from './pages/Dashboard';
+import { Routes } from './Routes';
+import { Transaction } from './views/customer';
 
 const App: React.FC = () => {
+    Routes.forEach((route) => console.log(route.path));
     return (
         <Router>
             <AuthProvider>
@@ -21,15 +22,28 @@ const App: React.FC = () => {
                     <Route path="/signup">
                         <SignUp />
                     </Route>
-                    <AuthGuard path="/home" redirect="/">
-                        <Home />
-                    </AuthGuard>
+                    {/* AUTHENTICATED ROUTES BEGIN*/}
+                    {Routes.map((route, idx) => (
+                        <AuthGuard
+                            path={route.path}
+                            redirect="/"
+                            authRedirect="/dashboard/home"
+                            key={idx}
+                            account_type={route.account_type}
+                        >
+                            <Dashboard>
+                                <route.content />
+                            </Dashboard>
+                        </AuthGuard>
+                    ))}
+                    {/* AUTHENTICATED ROUTES END*/}
+
                     {/* DEV ROUTES BEGIN*/}
-                    <Route path="/dashboard">
-                        <Dashboard children={null} />
+                    <Route path="/dev/dashboard">
+                        <Dashboard />
                     </Route>
-                    <Route path="/transaction">
-                        <Transaction children={null} />
+                    <Route path="/dev/transaction">
+                        <Transaction />
                     </Route>
                     {/* DEV ROUTES END */}
                 </Switch>
