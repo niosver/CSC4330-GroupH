@@ -8,6 +8,11 @@ import { HomePath } from 'Routes';
 import { LoginState } from 'types/Login';
 import { UserCreation, userCreationSchema } from 'types/User';
 
+/**
+ * @todo
+ *  - display errors on failed sign-up
+ *
+ */
 export const SignUp: React.FC = () => {
     const history = useHistory();
     const auth = useAuth();
@@ -20,7 +25,7 @@ export const SignUp: React.FC = () => {
         resolver: zodResolver(userCreationSchema),
     });
     const onSubmit = async (data: UserCreation) => {
-        const status = await auth.signIn(data, () => history.push(HomePath));
+        const status = await auth.signUp(data, () => history.push(HomePath));
         if (!status) {
             setState((prevState) => ({
                 ...prevState,

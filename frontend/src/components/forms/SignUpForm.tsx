@@ -35,6 +35,9 @@ export const SignUpForm: React.FC<SignUpFormProps> = (props) => {
         phoneNumber: '0123456789',
         firstName: 'first',
         lastName: 'last',
+        cc_name: 'First Last',
+        cc_number: 411111111111111,
+        billing_address: 'address2',
     };
     return (
         <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
@@ -166,7 +169,45 @@ export const SignUpForm: React.FC<SignUpFormProps> = (props) => {
                 }}
             />
             <span className={classes.error}>{errors.birthdate?.message}</span>
-
+            <TextField
+                defaultValue={defaultValue.cc_name} //test only
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="cc_name"
+                label="Cardholder Name"
+                name="cc_name"
+                autoComplete="name"
+                inputRef={register}
+            />
+            <span className={classes.error}>{errors.cc_name?.message}</span>
+            <TextField
+                defaultValue={defaultValue.billing_address} //test only
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="billing_address"
+                label="Billing Address"
+                name="billing_address"
+                autoComplete="billing street-address"
+                inputRef={register}
+            />
+            <span className={classes.error}>{errors.billing_address?.message}</span>
+            <TextField
+                defaultValue={defaultValue.cc_number} //test only
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="cc_number"
+                label="CreditCard Number"
+                name="cc_number"
+                autoComplete="cc-number"
+                inputRef={register}
+            />
+            <span className={classes.error}>{errors.cc_number?.message}</span>
             <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"

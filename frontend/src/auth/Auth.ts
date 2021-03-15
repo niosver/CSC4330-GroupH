@@ -106,28 +106,28 @@ export class Auth implements IAuth {
      *      1) verifying new account successfully created through post request to api
      *      2) invoking callback function to route user to appropriate user view
      *
-     * @todo
-     * - sign user in after successful account creation
-     *
      * @param userCreation {UserLogin} Object containing email and password
      * @param callback {() => void} function to be invoked after verifying sign-up success
      *
      * @returns {Promise<boolean>} promise resolving to true on sign-up success
      *                           | to false on sign-up failure
      */
-    public async signUp(userCreation: UserCreation): Promise<boolean> {
+    public async signUp(userCreation: UserCreation, callback: () => void): Promise<boolean> {
         this.loading = true;
         let success = false;
         try {
+            const { confirmPassword, ...rest } = userCreation;
             const config: FetchConfig = {
-                url: '/api/signup',
+                url: '/api/accounts/signup',
                 method: 'POST',
-                data: { ...userCreation },
+                data: { ...rest },
             };
-            const res = await axios.request<UserPublic | { error: any }>(config);
+            const res = await axios.request<UserPublic>(config);
             /* check if api returns valid public user object */
             if (res.status === 200) {
                 success = true;
+                this.user = res.data;
+                callback();
             }
         } catch (error) {
             console.error(error);
