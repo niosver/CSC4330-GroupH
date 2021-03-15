@@ -1,6 +1,7 @@
 import * as z from 'zod';
 
 export enum UserRole {
+    Any = 'any',
     Customer = 'customer',
     Manager = 'manager',
     Owner = 'owner',
