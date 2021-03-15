@@ -4,6 +4,7 @@ import { SignUpForm } from 'components/forms';
 import React, { useEffect } from 'react';
 import { useForm, UseFormMethods } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
+import { HomePath } from 'Routes';
 import { LoginState } from 'types/Login';
 import { UserCreation, userCreationSchema } from 'types/User';
 
@@ -19,7 +20,7 @@ export const SignUp: React.FC = () => {
         resolver: zodResolver(userCreationSchema),
     });
     const onSubmit = async (data: UserCreation) => {
-        const status = await auth.signIn(data, () => history.push('/home'));
+        const status = await auth.signIn(data, () => history.push(HomePath));
         if (!status) {
             setState((prevState) => ({
                 ...prevState,

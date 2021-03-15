@@ -21,7 +21,7 @@ export const AuthContext = createContext<IAuth | undefined>(undefined);
 export const useAuth = () => {
     const ctx = React.useContext(AuthContext);
     if (ctx === undefined) {
-        throw new Error('useAuth must be used within AuthProvider');
+        throw new Error('useAuth must be used within a child component of AuthProvider');
     }
     return ctx;
 };

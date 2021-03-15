@@ -4,6 +4,7 @@ import { SignInForm } from 'components/forms';
 import React, { useEffect } from 'react';
 import { useForm, UseFormMethods } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
+import { HomePath } from 'Routes';
 import { LoginState } from 'types/Login';
 import { UserLogin, userLoginSchema } from 'types/User';
 
@@ -19,7 +20,7 @@ export const SignIn: React.FC = () => {
         resolver: zodResolver(userLoginSchema),
     });
     const onSubmit = async (data: UserLogin) => {
-        const status = await auth.signIn(data as UserLogin, () => history.push('/home'));
+        const status = await auth.signIn(data as UserLogin, () => history.push(HomePath));
         if (!status) {
             setState({
                 loading: auth.loading,

@@ -138,8 +138,9 @@ router.get("/me", async function (req, res, next) {
 	}
 	try {
 		const db = req.app.locals.db;
-		const account_type = await db.query(check_account_type, [maybeUsername]);
-		res.status(200).send({ username: maybeUsername, account_type: account_type });
+		const result = await db.query(check_account_type, [maybeUsername]);
+		const account_type = result[0].account_type;
+		res.status(200).send({ username: maybeUsername, account_type });
 	} catch (error) {
 		Logger.log(error, Logger.ERROR);
 		res.status(400).send("Internal server error");
