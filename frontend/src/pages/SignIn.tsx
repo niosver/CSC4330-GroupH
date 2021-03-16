@@ -36,9 +36,7 @@ export const SignIn: React.FC = () => {
         console.log(`auth_loading: ${auth.loading}`, `state_loading: ${state.loading}`);
     }, [auth.loading]);
 
-    return false ? (
-        <div>loading...</div>
-    ) : (
+    return (
         <SignInForm
             formMethod={signInFormMethod}
             onSubmit={onSubmit}

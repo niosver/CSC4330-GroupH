@@ -41,16 +41,10 @@ export const SignUp: React.FC = () => {
     }, [auth.loading]);
 
     return (
-        <>
-            {state.loading ? (
-                <div>loading</div>
-            ) : (
-                <SignUpForm
-                    formMethod={formMethod}
-                    onSubmit={onSubmit}
-                    submissionError={state.submissionError}
-                />
-            )}
-        </>
+        <SignUpForm
+            formMethod={formMethod}
+            onSubmit={onSubmit}
+            submissionError={state.submissionError}
+        />
     );
 };
