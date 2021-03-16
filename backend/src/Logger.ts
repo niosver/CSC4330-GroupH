@@ -47,7 +47,7 @@ export class Logger {
 				: level == this.WARN
 				? chalk.yellow(level)
 				: chalk.red(level);
-		console.log(`[${_level}]  ${time}  `, message);
+		console.log(`[${_level}]\t`, `${time}\t`, message);
 	}
 }
 /**
