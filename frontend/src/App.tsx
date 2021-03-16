@@ -3,11 +3,17 @@ import { Home } from 'pages/Home';
 import { Login } from 'pages/Login';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { useFetch, FetchConfig } from 'UseFetch';
 import './App.css';
 import { AuthContext, useAuth } from './auth/AuthContext';
 
 const App: React.FC = () => {
     const auth = useAuth();
+    const config: FetchConfig = {
+        url: './hello',
+        method: 'GET',
+    };
+    const response = useFetch<string>(config);
     return (
         <AuthContext.Provider value={auth}>
             <Router>

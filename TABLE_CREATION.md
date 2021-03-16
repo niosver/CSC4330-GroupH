@@ -21,11 +21,14 @@ CREATE TABLE Customer(
 CREATE TABLE Transaction(
     transaction_id INT AUTO_INCREMENT,
     price INT NOT NULL,
+    damage_fee INT,
     cc_number VARCHAR(16) NOT NULL,              
-    transaction_date DATE NOT NULL,
+    start_date DATETIME NOT NULL,
+    end_date DATETIME,
     customer_id INT NOT NULL,
     origin_dock INT NOT NULL,
-    destination_dock INT NOT NULL,
+    destination_dock INT,
+    status ENUM('in_progress','complete') NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
     FOREIGN KEY (origin_dock) REFERENCES BikeDock(bike_dock_number),
     FOREIGN KEY (destination_dock) REFERENCES BikeDock(bike_dock_number),
@@ -35,7 +38,7 @@ CREATE TABLE Transaction(
 CREATE TABLE Account(
     username VARCHAR(50),
     password VARCHAR(60),
-    account_type ENUM('owner','manager','customer'),
+    account_type ENUM('owner','manager','customer') NOT NULL,
     customer_id INT NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
     PRIMARY KEY(username)

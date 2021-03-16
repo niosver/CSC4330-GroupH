@@ -1,5 +1,7 @@
+import axios from 'axios';
 import { createContext, useContext } from 'react';
-import { UserLogin, UserPublic, UserRole } from 'types/User';
+import { UserCreation, UserLogin, UserPublic, UserRole } from 'types/User';
+import { FetchConfig, useFetch } from 'UseFetch';
 
 /** Interface for authentication object
  * @typedef user
@@ -27,19 +29,23 @@ class Auth implements IAuth {
     private validUsers: UserPublic[] = [
         {
             id: 1,
+            first_name: 'John',
+            last_name: 'Doe',
             email: 'user1@email.com',
             address: 'address1',
-            birthday: new Date(Date.now()),
+            birthdate: new Date(Date.now()),
             phoneNumber: 2251234567,
-            role: UserRole.Customer,
+            account_type: UserRole.Customer,
         },
         {
             id: 2,
+            first_name: 'Jane',
+            last_name: 'Doe',
             email: 'user2@email.com',
             address: 'address2',
-            birthday: new Date(Date.now()),
+            birthdate: new Date(Date.now()),
             phoneNumber: 2257651234,
-            role: UserRole.Customer,
+            account_type: UserRole.Customer,
         },
     ];
     /** Initialize authentication object with no user signed-in */
@@ -82,6 +88,22 @@ class Auth implements IAuth {
             callback();
 
             /* signal successful sign-in */
+            return true;
+        }
+        /* signal failed to sig-in */
+        return false;
+    }
+    public async signUp(userCreation: UserCreation): Promise<boolean> {
+        /* api operation to be implemented here */
+        const config: FetchConfig = {
+            url: '/api/signup',
+            method: 'POST',
+            data: { ...userCreation },
+        };
+        const res = await axios.request<UserPublic | { error: any }>(config);
+        const data = res.data;
+        /* check if api returns valid public user object */
+        if (res.status === 200) {
             return true;
         }
         /* signal failed to sig-in */
