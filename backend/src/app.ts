@@ -14,6 +14,7 @@ declare module "express-session" {
 		username: string;
 		customer_id: number;
 		current_transactions: Array<number>;
+		account_type: string;
 	}
 }
 
@@ -36,7 +37,7 @@ app.get("/hello", (_req, res) => {
 app.use(
 	"/api",
 	session({
-		key: 'express_sid',
+		key: "express_sid",
 		//@ts-ignore
 		secret: process.env.SECRET,
 		saveUninitialized: false,
@@ -70,4 +71,4 @@ app.use("/api/customers", customers);
 
 app.use("/api/transactions", transaction);
 
-export {app};
+export { app };

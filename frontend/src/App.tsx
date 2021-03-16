@@ -1,32 +1,54 @@
-import { AuthGuard } from 'auth/AuthGuard';
-import { Home } from 'pages/Home';
-import { Login } from 'pages/Login';
+import { AuthGuard, AuthProvider } from 'auth';
+import { Landing, SignIn, SignUp } from 'pages';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { useFetch, FetchConfig } from 'UseFetch';
 import './App.css';
-import { AuthContext, useAuth } from './auth/AuthContext';
+import { Dashboard } from './pages/Dashboard';
+import { Routes } from './Routes';
+import { Transaction } from './views/customer';
 
 const App: React.FC = () => {
-    const auth = useAuth();
-    const config: FetchConfig = {
-        url: './hello',
-        method: 'GET',
-    };
-    const response = useFetch<string>(config);
+    Routes.forEach((route) => console.log(route.path));
     return (
-        <AuthContext.Provider value={auth}>
-            <Router>
+        <Router>
+            <AuthProvider>
                 <Switch>
                     <Route exact path="/">
-                        <Login />
+                        <Landing />
                     </Route>
-                    <AuthGuard path="/home">
-                        <Home />
-                    </AuthGuard>
+                    <Route path="/signin">
+                        <SignIn />
+                    </Route>
+                    <Route path="/signup">
+                        <SignUp />
+                    </Route>
+                    {/* AUTHENTICATED ROUTES BEGIN*/}
+                    {Routes.map((route, idx) => (
+                        <AuthGuard
+                            path={route.path}
+                            redirect="/"
+                            authRedirect="/dashboard/home"
+                            key={idx}
+                            account_type={route.account_type}
+                        >
+                            <Dashboard>
+                                <route.content />
+                            </Dashboard>
+                        </AuthGuard>
+                    ))}
+                    {/* AUTHENTICATED ROUTES END*/}
+
+                    {/* DEV ROUTES BEGIN*/}
+                    <Route path="/dev/dashboard">
+                        <Dashboard />
+                    </Route>
+                    <Route path="/dev/transaction">
+                        <Transaction />
+                    </Route>
+                    {/* DEV ROUTES END */}
                 </Switch>
-            </Router>
-        </AuthContext.Provider>
+            </AuthProvider>
+        </Router>
     );
 };
 export default App;

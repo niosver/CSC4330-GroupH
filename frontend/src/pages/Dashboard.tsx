@@ -1,26 +1,30 @@
+import { Button } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Badge from '@material-ui/core/Badge';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
+import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import { useAuth } from 'auth';
 import clsx from 'clsx';
 import React from 'react';
-import { mainListItems, secondaryListItems } from '../components/listItems';
-import Orders from '../components/Orders';
+import { useHistory } from 'react-router-dom';
+import { UserPublic } from 'types/User';
+import { NavDrawer } from '../components/NavDrawer';
 
 const drawerWidth = 240;
+
+function preventDefault(event: { preventDefault: () => void }) {
+    event.preventDefault();
+}
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -100,11 +104,8 @@ const useStyles = makeStyles((theme) => ({
         height: 240,
     },
 }));
-type Props = {
-    children: React.ReactNode;
-};
-export const Dashboard: React.FC<Props> = (props) => {
-    const { children } = props;
+
+export const Dashboard: React.FC = ({ children }) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const handleDrawerOpen = () => {
@@ -114,6 +115,22 @@ export const Dashboard: React.FC<Props> = (props) => {
         setOpen(false);
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    const auth = useAuth();
+    const history = useHistory();
+
+    const temp = (user: UserPublic) => (
+        <>
+            <h1>{user!.username}</h1>
+            <Button
+                color="secondary"
+                type="button"
+                onClick={() => auth.signOut(() => history.push('/'))}
+            >
+                sign out
+            </Button>
+        </>
+    );
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -141,51 +158,47 @@ export const Dashboard: React.FC<Props> = (props) => {
                         Dashboard
                     </Typography>
                     <IconButton color="inherit">
-                        <Badge badgeContent={4} color="secondary">
+                        <Badge badgeContent={1} color="secondary">
                             <NotificationsIcon />
                         </Badge>
                     </IconButton>
                 </Toolbar>
             </AppBar>
-            <Drawer
+            <NavDrawer
                 variant="permanent"
                 classes={{
+                    ...classes,
                     paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
                 }}
                 open={open}
-            >
-                <div className={classes.toolbarIcon}>
-                    <IconButton onClick={handleDrawerClose}>
-                        <ChevronLeftIcon />
-                    </IconButton>
-                </div>
-                <Divider />
-                <List>{mainListItems}</List>
-                <Divider />
-                <List>{secondaryListItems}</List>
-            </Drawer>
+                handleDrawerClose={handleDrawerClose}
+            />
+
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
                 {/* BEGIN temporary email + sign-out button */}
                 <Container maxWidth="lg" className={classes.container}>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            <Paper className={classes.paper}>{children}</Paper>
+                            <Paper className={classes.paper}>
+                                {auth.user ? temp(auth.user) : <h1>Error not logged in</h1>}
+                            </Paper>
                         </Grid>
                     </Grid>
                 </Container>
                 {/* END */}
                 <Container maxWidth="lg" className={classes.container}>
+                    {/* BEGIN CONTENT*/}
                     <Grid container spacing={3}>
-                        {/* Recent Orders */}
                         <Grid item xs={12}>
-                            <Paper className={classes.paper}>
-                                <Orders />
-                            </Paper>
+                            <Paper className={classes.paper}>{children}</Paper>
                         </Grid>
                     </Grid>
+                    {/* END CONTENT*/}
                     <Box pt={4}>
-                        <div>About us</div>
+                        <Link color="primary" href="#" onClick={preventDefault}>
+                            About us
+                        </Link>
                     </Box>
                 </Container>
             </main>
