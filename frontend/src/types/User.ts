@@ -1,6 +1,7 @@
 import * as z from 'zod';
 
 export enum UserRole {
+    Any = 'any',
     Customer = 'customer',
     Manager = 'manager',
     Owner = 'owner',
@@ -19,22 +20,24 @@ export const userSchema = z.object({
     email: z.string().email(),
     password: z.string().min(8).max(16),
     address: z.string(),
-    billing_address: z.string(),
     birthdate: z.string().transform(z.date(), (val) => new Date(val)),
     // takes input as string -> validates against regex -> transforms to number for server
     phoneNumber: z
         .string()
         .regex(phoneRegex)
         .transform(z.number(), (str) => parseInt(str, 10)),
-    credit_card: z.number().optional(), // validation might be too complex
+    cc_number: z.string().transform(z.number(), (str) => parseInt(str, 10)), // validation might be too complex
+    cc_name: z.string(),
+    billing_address: z.string(),
 });
 /** Validation object for new user */
 export const userCreationSchema = userSchema
     .omit({
         id: true,
-        credit_card: true,
         account_type: true,
-        billing_address: true,
+        // cc_number: true, //may be optional in future
+        // cc_name: true, //may be optional in future
+        // billing_address: true, //may be optional in future
     })
     .extend({ confirmPassword: z.string().min(8).max(16) })
     .refine((schema) => schema.password == schema.confirmPassword, {
@@ -60,20 +63,20 @@ const _userPublicSchema = userSchema.pick({
 /** Type for User */
 export type User = z.infer<typeof userSchema>;
 /** Interface for User */
-export type IUser = User;
+export interface IUser extends User {}
 /** Type for storing user details in client */
 export type UserPublic = z.infer<typeof _userPublicSchema>;
 /** Interface for storing user details in client */
-export type IUserPublic = UserPublic;
+export interface IUserPublic extends UserPublic {}
 /** Type for creating new User */
 export type UserCreation = z.infer<typeof userCreationSchema>;
 /** Interface for creating new User */
-export type IUserCreation = UserCreation;
+export interface IUserCreation extends UserCreation {}
 /** Type for User login */
 export type UserLogin = z.infer<typeof userLoginSchema>;
 /** Interface for User login */
-export type IUserLogin = UserLogin;
+export interface IUserLogin extends UserLogin {}
 /** Type for modifying User properties */
 export type UserMutation = z.infer<typeof userMutationSchema>;
 /** Interface for modifying User properties */
-export type IUserMutation = UserMutation;
+export interface IUserMutation extends UserMutation {}

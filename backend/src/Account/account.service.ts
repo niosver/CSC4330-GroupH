@@ -62,7 +62,7 @@ router.post("/signup", async function (req, res, next) {
 		]);
 		req.session.username = newA.username;
 		db.commit();
-		res.status(200).send("OK");
+		res.status(200).send({ username: newA.username, account_type: newA.account_type });
 	} catch (error) {
 		db.rollback();
 		res.status(400).send("Error creating new account");
@@ -107,13 +107,15 @@ router.post("/login", async function (req, res) {
 		   a new hash will be different despite sharing the same unhashed password */
 		// let p_hash = await bcrypt.hash(json.password, saltRounds);
 		// let count = await db.query(check_login, [json.username, p_hash]);
-		let user = await db.query("select * from Account where username = ?", [json.username]);
-		await bcrypt.compare(json.password, user[0].password, async (err, same) => {
+		const result = await db.query("select * from Account where username = ?", [json.username]);
+		const user = result[0];
+		await bcrypt.compare(json.password, user.password, async (err, same) => {
 			if (err) {
 				Logger.log(err, Logger.ERROR);
 			}
 			if (same) {
 				req.session.username = json.username;
+				req.session.account_type = user.account_type;
 				/* Account may not be customer so cannot set cutomer id for this method */
 				// let customer_id = await db.query(get_customer_id, [json.username]);
 				// req.session.customer_id = customer_id;
@@ -131,18 +133,14 @@ router.post("/login", async function (req, res) {
    redirecting to login page
  */
 router.get("/me", async function (req, res, next) {
-	const maybeUsername: string | undefined = req.session.username;
-	if (!maybeUsername) {
+	if (!req.session.username) {
 		res.status(401).send("User not authenticated/signed-in");
 		return next();
-	}
-	try {
-		const db = req.app.locals.db;
-		const account_type = await db.query(check_account_type, [maybeUsername]);
-		res.status(200).send({ username: maybeUsername, account_type: account_type });
-	} catch (error) {
-		Logger.log(error, Logger.ERROR);
-		res.status(400).send("Internal server error");
+	} else {
+		res.status(200).send({
+			username: req.session.username,
+			account_type: req.session.account_type,
+		});
 	}
 });
 router.post("/logout", async function (req, res) {

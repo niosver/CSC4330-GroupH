@@ -12,7 +12,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import React from 'react';
-import Title from './Title';
+import Title from '../../components/Title';
 
 // Generate Order Data
 function createData(id: number, dockNumber: number, address: string, bikesAvailable: number) {
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Orders() {
+export const Docks: React.FC = () => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
@@ -158,4 +158,4 @@ export default function Orders() {
             </div>
         </React.Fragment>
     );
-}
+};

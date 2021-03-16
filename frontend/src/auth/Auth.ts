@@ -19,22 +19,30 @@ export interface IAuth {
  * granting access to guarded routes and supplying data for consumer operations
  *
  * @todo
- * - Implement handling of different views e.g. customer, manager, owner
- * - Implement backend sign-up method
- * - Implement error handling
- * - Refactor to Auth to return component and use hook: UseFetch
+ * - Refactor loading to new context
  */
 export class Auth implements IAuth {
     public user: UserPublic | null;
     public loading: boolean;
-    /* Temporary placeholder for api */
 
     /** Initialize authentication object with no user signed-in */
     constructor() {
         this.user = null;
         this.loading = false;
     }
-    public async init(callback: () => void) {
+    /**
+     * Method to sign-in user from http-only cookie by:
+     *      1) verifying cookie is mapped to valid express session
+     *      2) invoking callback function to route user to appropriate user view
+     *
+     * Should be called once during lifecycle stage: 'OnComponentMount' from Context Provider
+     * @see {file://./AuthProvider.tsx}
+     *
+     * @param callback {() => void} function to be invoked after verifying correct email, password
+     * @returns {Promise<boolean>} promise resolving to true on sign-in success
+     *                           | to false on sign-in failure
+     */
+    public async init(callback: () => void): Promise<boolean> {
         this.loading = true;
         let success = false;
         try {
@@ -60,7 +68,7 @@ export class Auth implements IAuth {
     /**
      * Method to sign-in a user into the application by:
      *      1) verifying email and password are correct through post request to api
-     *      2) invoking callback function to router user to appropriate user view
+     *      2) invoking callback function to route user to appropriate user view
      *
      * @param userLogin {UserLogin} Object containing email and password
      * @param callback {() => void} function to be invoked after verifying correct email, password
@@ -93,19 +101,33 @@ export class Auth implements IAuth {
             return success;
         }
     }
-    public async signUp(userCreation: UserCreation): Promise<boolean> {
+    /**
+     * Method to sign-up a user into the application by:
+     *      1) verifying new account successfully created through post request to api
+     *      2) invoking callback function to route user to appropriate user view
+     *
+     * @param userCreation {UserLogin} Object containing email and password
+     * @param callback {() => void} function to be invoked after verifying sign-up success
+     *
+     * @returns {Promise<boolean>} promise resolving to true on sign-up success
+     *                           | to false on sign-up failure
+     */
+    public async signUp(userCreation: UserCreation, callback: () => void): Promise<boolean> {
         this.loading = true;
         let success = false;
         try {
+            const { confirmPassword, ...rest } = userCreation;
             const config: FetchConfig = {
-                url: '/api/signup',
+                url: '/api/accounts/signup',
                 method: 'POST',
-                data: { ...userCreation },
+                data: { ...rest },
             };
-            const res = await axios.request<UserPublic | { error: any }>(config);
+            const res = await axios.request<UserPublic>(config);
             /* check if api returns valid public user object */
             if (res.status === 200) {
                 success = true;
+                this.user = res.data;
+                callback();
             }
         } catch (error) {
             console.error(error);
@@ -116,8 +138,12 @@ export class Auth implements IAuth {
     }
     /**
      * Method to sign-out a user from the application by:
-     *  1) Remove user object from storage
-     *  2) Invoke callback to route user to sign-in page
+     *  1) Remove user object from storage through post request to api
+     *  2) Invoke callback to route user to landing page on sign-out success
+     *
+     * Note: Does NOT signout/re-route user on FAILURE.
+     * E.g. user tries to sign-out when server is busy will not show user signed out:
+     *      if the session-cookie is still present, the user is still signed in.
      *
      * @param callback {() => void} function to be invoked after removing user
      * @returns {Promise<boolean>} promise resolving to true on sign-out success
