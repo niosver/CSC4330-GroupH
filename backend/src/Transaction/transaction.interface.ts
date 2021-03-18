@@ -64,7 +64,7 @@ export class Transaction {
 			this.end_date = end;
 		}
 		//@ts-ignore
-		let ms = this.start_date - this.end_date;
+		let ms = this.end_date - this.start_date;
 		let hrs = ms / msToHour;
 		let hr = Math.floor(hrs);
 		let remainder = hrs - hr;
