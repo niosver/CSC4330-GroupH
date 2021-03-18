@@ -6,22 +6,22 @@
  * Usage: mysql -u user -p < TABLE_CREATION.sql
  */
 
-/* select database */
+/* Select database */
 use bikeapp;
 
-/* turn off foreign key checks to force drop tables */
+/* Turn off foreign key checks to force drop tables */
 SET FOREIGN_KEY_CHECKS = 0;
 
-/* drop all tables */
+/* Drop all tables */
 DROP TABLE IF EXISTS Account;
 DROP TABLE IF EXISTS Customer;
 DROP TABLE IF EXISTS BikeDock;
 DROP TABLE IF EXISTS Transaction;
 
-/* turn foreign key checks back on */
+/* Turn foreign key checks back on */
 SET FOREIGN_KEY_CHECKS = 1;
 
-/* create tables */
+/* Create tables */
 CREATE TABLE BikeDock(
     bike_dock_number INT,
     number_of_bikes INT NOT NULL,
@@ -67,22 +67,26 @@ CREATE TABLE Account(
     FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
     PRIMARY KEY(username)
 );
-/* insert dummy customer into Account and Customer tables */
 
+/* Insert dummy customer "user1" with hashed password "password" into Account and Customer tables */
 INSERT INTO Customer(firstname,lastname,address,birthdate,email,cc_number,cc_name,billing_address) 
     VALUES("John","Doe","123 N. Madeup St.",now(),"user1@email.com","1234567891011121","John Doe","123 N. Madeup St.");
 SET @a_id = LAST_INSERT_ID();
-INSERT INTO Account VALUES("dev1","password","customer",@a_id);
+INSERT INTO Account VALUES("user1","$2b$10$y3mRo0u3oDcB4M1iUcxRVe0DtfYtPeZpY0W5sYh1g7sFkeqLvKHdO","customer",@a_id);
 
+/* Insert dummy customer "user2" with hashed password "password"into Account and Customer tables */
 INSERT INTO Customer(firstname,lastname,address,birthdate,email,cc_number,cc_name,billing_address) 
     VALUES("Jane","Doe","123 N. Madeup Ave.",now(),"user2@email.com","1211101987654321","Jane Doe","123 N. Madeup Ave.");
 SET @a_id = LAST_INSERT_ID();
-INSERT INTO Account VALUES("dev2","password2","customer",@a_id);
-/* insert dummy manager into Account table */
-INSERT INTO Account VALUES("man1","password3","manager",null);
-/* insert dummy owner into Account table*/
-INSERT INTO Account VALUES("own1","password4","owner",null);
-/* insert 8 docks into BikeDock table*/
+INSERT INTO Account VALUES("user2","$2b$10$y3mRo0u3oDcB4M1iUcxRVe0DtfYtPeZpY0W5sYh1g7sFkeqLvKHdO","customer",@a_id);
+
+/* Insert dummy manager "man1" with hashed password "password" into Account table */
+INSERT INTO Account VALUES("man1","$2b$10$y3mRo0u3oDcB4M1iUcxRVe0DtfYtPeZpY0W5sYh1g7sFkeqLvKHdO","manager",null);
+
+/* Insert dummy owner "own1" with hashed password "password" into Account table*/
+INSERT INTO Account VALUES("own1","$2b$10$y3mRo0u3oDcB4M1iUcxRVe0DtfYtPeZpY0W5sYh1g7sFkeqLvKHdO","owner",null);
+
+/* Insert 10 docks into BikeDock table*/
 INSERT INTO BikeDock VALUES(1,3,"Location 1");
 INSERT INTO BikeDock VALUES(2,3,"Location 2");
 INSERT INTO BikeDock VALUES(3,3,"Location 3");
@@ -93,4 +97,3 @@ INSERT INTO BikeDock VALUES(7,3,"Location 7");
 INSERT INTO BikeDock VALUES(8,3,"Location 8");
 INSERT INTO BikeDock VALUES(9,3,"Location 9");
 INSERT INTO BikeDock VALUES(10,3,"Location 10");
-/* insert renting price into ? */
