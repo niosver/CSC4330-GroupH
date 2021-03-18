@@ -7,20 +7,20 @@ const msToHour = 3600000;
 const hrFee = 9;
 const halfHrFee = 5;
 export class Transaction{
-    price: number | undefined;
+    price: number | null;
     damage_fee: number;
     cc_number: string;
     start_date: Date;
-    end_date: Date | undefined;
+    end_date: Date | null;
     customer_id: number;
     origin_dock: number;
-    destination_dock: number | undefined;
+    destination_dock: number | null;
     status: Status;
 
-    constructor(cc_number: string, start_date: Date, customer_id: number,origin_dock:number,destination_dock?:number,price?:number) {
-        this.price = undefined;
-        this.end_date = undefined;
-        this.destination_dock = undefined;
+    constructor(cc_number: string, start_date: Date, customer_id: number,origin_dock:number,destination_dock:number|null = null,price:number|null=null,end_date:Date|null=null) {
+        this.price = price;
+        this.end_date = end_date;
+        this.destination_dock = destination_dock;
 
         this.cc_number = cc_number;
         this.start_date = start_date;

@@ -44,7 +44,7 @@ CREATE TABLE Customer(
 
 CREATE TABLE Transaction(
     transaction_id INT AUTO_INCREMENT,
-    price INT NOT NULL,
+    price INT,
     damage_fee INT,
     cc_number VARCHAR(16) NOT NULL,              
     start_date DATETIME NOT NULL,
@@ -63,16 +63,34 @@ CREATE TABLE Account(
     username VARCHAR(50),
     password VARCHAR(60),
     account_type ENUM('owner','manager','customer') NOT NULL,
-    customer_id INT NOT NULL,
+    customer_id INT,
     FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
     PRIMARY KEY(username)
 );
 /* insert dummy customer into Account and Customer tables */
 
+INSERT INTO Customer(firstname,lastname,address,birthdate,email,cc_number,cc_name,billing_address) 
+    VALUES("John","Doe","123 N. Madeup St.",now(),"user1@email.com","1234567891011121","John Doe","123 N. Madeup St.");
+SET @a_id = LAST_INSERT_ID();
+INSERT INTO Account VALUES("dev1","password","customer",@a_id);
+
+INSERT INTO Customer(firstname,lastname,address,birthdate,email,cc_number,cc_name,billing_address) 
+    VALUES("Jane","Doe","123 N. Madeup Ave.",now(),"user2@email.com","1211101987654321","Jane Doe","123 N. Madeup Ave.");
+SET @a_id = LAST_INSERT_ID();
+INSERT INTO Account VALUES("dev2","password2","customer",@a_id);
 /* insert dummy manager into Account table */
-
+INSERT INTO Account VALUES("man1","password3","manager",null);
 /* insert dummy owner into Account table*/
-
+INSERT INTO Account VALUES("own1","password4","owner",null);
 /* insert 8 docks into BikeDock table*/
-
+INSERT INTO BikeDock VALUES(1,3,"Location 1");
+INSERT INTO BikeDock VALUES(2,3,"Location 2");
+INSERT INTO BikeDock VALUES(3,3,"Location 3");
+INSERT INTO BikeDock VALUES(4,3,"Location 4");
+INSERT INTO BikeDock VALUES(5,3,"Location 5");
+INSERT INTO BikeDock VALUES(6,3,"Location 6");
+INSERT INTO BikeDock VALUES(7,3,"Location 7");
+INSERT INTO BikeDock VALUES(8,3,"Location 8");
+INSERT INTO BikeDock VALUES(9,3,"Location 9");
+INSERT INTO BikeDock VALUES(10,3,"Location 10");
 /* insert renting price into ? */
