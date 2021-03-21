@@ -1,4 +1,5 @@
 import express from "express";
+import { Account_Type } from "../Account/account.interface";
 import { Logger } from "../Logger";
 import { Transaction, Status } from "./transaction.interface";
 
@@ -13,14 +14,21 @@ const insert_trans =
 const update_trans =
 	"UPDATE Transaction SET end_date=?,price=?,destination_dock=?,status=? WHERE transaction_id=?;";
 const add_fee = "UPDATE Transaction SET damage_fee=? WHERE transaction_id=?;";
-const lookup_trans ="SELECT * FROM Transaction WHERE transaction_id=? AND customer_id=? AND status=\"in_progress\";"
-const get_trans = "SELECT * FROM Transaction WHERE customer_id=? AND status=\"in_progress\";"
+const lookup_trans ="SELECT * FROM Transaction WHERE transaction_id=? AND customer_id=? AND status=\"in_progress\";";
+const get_trans = "SELECT * FROM Transaction WHERE customer_id=? AND status=\"in_progress\";";
+const get_bike_number = "SELECT * FROM BikeDock WHERE bike_dock_number=?;";
+const insert_bike_number = "UPDATE BikeDock SET number_of_bikes=? WHERE bike_dock_number=?;";
 
 router.post("/rent", async function (req, res, next) {
 	let db = req.app.locals.db;
 	let json = req.body;
 	let result;
 	try {
+		if(!req.session.customer_id) {
+			res.status(400).send("Please login");
+			return next();
+		}
+		db.beginTransaction();
 		let id = req.session.customer_id;
 		if (id == undefined) {
 			res.status(400).send("Missing account info for rental.");
@@ -39,14 +47,23 @@ router.post("/rent", async function (req, res, next) {
 			trans.status,
 		]);
 		const trans_id = result.insertId;
+		result = await db.query(get_bike_number,[json.dock]);
+		if(result[0].number_of_bikes>0) {
+			let num = result[0].number_of_bikes-1;
+			result = await db.query(insert_bike_number,[num,json.dock]);
+		}
+		else {
+			db.rollback();
+			res.status(400).send("Unable to rent bike");
+			return next();
+		}
+		
 		if (trans_id >= 0) {
-			if (req.session.current_transactions == undefined) {
-				req.session.current_transactions = [];
-			}
-			req.session.current_transactions.push(trans_id);
+			db.commit();
 			res.status(200).send({ transaction_id: trans_id });
 		} else throw Error;
 	} catch (error) {
+		db.rollback();
 		Logger.log(error, Logger.ERROR);
 		res.status(400).send("Unable to process rental");
 	}
@@ -74,6 +91,10 @@ router.post("/return", async function (req, res, next) {
 	let now = new Date();
 	let result;
 	try {
+		if(!req.session.customer_id) {
+			res.status(400).send("Please login");
+			return next();
+		}
 		const request_trans_id = parseInt(json.transaction_id, 10); // extra safety in case transaction_id is sent as string
 		db.beginTransaction();
 		result = await db.query(lookup_trans,[request_trans_id,req.session.customer_id]);
@@ -99,6 +120,18 @@ router.post("/return", async function (req, res, next) {
 					u_trans.status,
 					json.transaction_id,
 				]);
+			
+			result = await db.query(get_bike_number,[json.dock]);
+			if(result[0].number_of_bikes<10) {
+				let num = result[0].number_of_bikes+1;
+				result = await db.query(insert_bike_number,[num,json.dock]);
+			}
+			else {
+				db.rollback();
+				res.status(400).send("Unable to return bike");
+				return next();
+			}	
+			
 			db.commit();
 			res.status(200).send({ price: price });
 		}
@@ -119,6 +152,10 @@ router.post("/damage_charge", async function (req, res, next) {
 	let db = req.app.locals.db;
 	let json = req.body;
 	try {
+		if(!(req.session.account_type == Account_Type.manager)) {
+			res.status(400).send("Please login as a manager");
+			return next();
+		}
 		if (json.damage_fee > 0 && json.damage_fee < 200) {
 			await db.query(add_fee, [json.damage_fee, json.transaction_id]);
 			res.status(200).send("OK");

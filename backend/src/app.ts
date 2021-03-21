@@ -4,7 +4,8 @@ import sqlConfig from "./sqlinterface";
 import dotenv from "dotenv";
 import accounts from "./Account/account.service";
 import customers from "./Customer/customer.service";
-import transaction from "./Transaction/transaction.service";
+import transactions from "./Transaction/transaction.service";
+import docks from "./Dock/dock.service";
 import session from "express-session";
 import { Logger, RequestLogger } from "./Logger";
 import bodyParser from "body-parser";
@@ -69,6 +70,8 @@ app.use("/api/accounts", accounts);
 
 app.use("/api/customers", customers);
 
-app.use("/api/transactions", transaction);
+app.use("/api/transactions", transactions);
+
+app.use("/api/docks",docks);
 
 export { app };
