@@ -121,8 +121,8 @@ router.post("/return", async function (req, res, next) {
 					json.transaction_id,
 				]);
 			
-			result = await db.query(get_bike_number,[json.dock]);
-			if(result[0].number_of_bikes<10) {
+			result = await db.query(get_bike_number,[json.destination_dock]);
+			if(result[0].number_of_bikes<6) {
 				let num = result[0].number_of_bikes+1;
 				result = await db.query(insert_bike_number,[num,json.dock]);
 			}
