@@ -1,4 +1,4 @@
-var execsql = require('execsql');
+var mysql = require('mysql');
 const dotenv = require('dotenv');
 
 dotenv.config();
