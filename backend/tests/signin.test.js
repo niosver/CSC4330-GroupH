@@ -6,9 +6,6 @@ afterAll(async (done) => {
     done();
 });
 
-beforeAll(async (done) => {
-});
-
 describe('Authentication', () => {
     const agent = request.agent(app)
     it('Login to account', async () => {
@@ -24,7 +21,7 @@ describe('Authentication', () => {
             });
     });
     it('Get Signed-in user information',async () => {
-        agent
+        return agent
             .get('/api/customers/me')
             .then((res) => {
                 expect(res.statusCode).toEqual(200);
@@ -39,7 +36,7 @@ describe('Authentication', () => {
 
     });
     it('Sign out of Account', async () => {
-        agent
+        return agent
             .post('/api/accounts/logout')
             .then((res) => {
                 expect(res.statusCode).toEqual(200);

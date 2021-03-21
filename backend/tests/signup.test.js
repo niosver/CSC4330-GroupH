@@ -6,9 +6,6 @@ afterAll(async (done) => {
     done();
 });
 
-beforeAll(async (done) => {
-});
-
 describe('Signup', () => {
     const agent = request.agent(app)
     it('Create new user account', async () => {
@@ -32,7 +29,7 @@ describe('Signup', () => {
             });
     });
     it('Get Signed-in user information',async () => {
-        agent
+        return agent
             .get('/api/customers/me')
             .then((res) => {
                 expect(res.statusCode).toEqual(200);
@@ -45,12 +42,12 @@ describe('Signup', () => {
                 expect(res.body).toHaveProperty('billing_address');
             });
 
-    },10000);
+    });
     it('Sign out of Account', async () => {
-        agent
+        return agent
             .post('/api/accounts/logout')
             .then((res) => {
                 expect(res.statusCode).toEqual(200);
             });
-    },10000);
+    });
 })
