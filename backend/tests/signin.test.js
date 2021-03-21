@@ -6,22 +6,14 @@ afterAll(async (done) => {
     done();
 });
 
-describe('Signup', () => {
+describe('Authentication', () => {
     const agent = request.agent(app)
-    it('Create new user account', async () => {
+    it('Login to account', async () => {
         return agent
-            .post('/api/accounts/signup')
+            .post('/api/accounts/login')
             .send({
-                first_name: 'John',
-                last_name: 'Doe',
-                email: 'user3@email.com',
                 password: 'password',
-                birthdate: new Date().toISOString(),
-                cc_number: '1234567891011121',
-                billing_address:'123 N. Madeup St.',
-                address:'123 N. Madeup St.',
-                cc_name: 'John Doe',
-                username: 'dev3',
+                username: 'user1',
             })
             .then((res) => {
                 expect(res.statusCode).toEqual(200);

@@ -7,7 +7,7 @@
     "start": "ts-node src/server.ts",
     "watch": "nodemon src/server.ts",
     "prod": "node ./dist/server.js",
-    "test": "jest --runInBand",
+    "test": "jest",
     "build": "tsc --build",
     "clean": "tsc --build --clean"
   },
@@ -29,6 +29,7 @@
     "@types/express-session": "^1.17.3",
     "@types/mysql": "^2.15.17",
     "chalk": "^3.0.0",
+    "execsql": "0.0.3",
     "jest": "^26.6.3",
     "nodemon": "^2.0.7",
     "superagent": "^6.1.0",
