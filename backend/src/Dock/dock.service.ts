@@ -9,6 +9,7 @@ router.get("/get_docks",async function (req, res, next) {
 	let db = req.app.locals.db;
     let docks = [];
     try {
+        db.beginTransaction();
         if(!req.session.username) {
 			res.status(400).send("Please login");
             return next();
@@ -23,8 +24,10 @@ router.get("/get_docks",async function (req, res, next) {
             docks.push(dock);
         }
         res.status(200).send({bike_docks:docks});
+        db.commit();
     }
     catch {
+        db.rollback();
         res.status(400).send("Unable to retrieve dock information");
     }
 });
