@@ -6,6 +6,7 @@ export enum Status {
 const msToHour = 3600000;
 const hrFee = 9;
 const halfHrFee = 5;
+const diffDockFee = 25;
 export class Transaction {
 	price: number;
 	damage_fee: number;
@@ -73,6 +74,9 @@ export class Transaction {
 			price += halfHrFee;
 		} else {
 			price += hrFee;
+		}
+		if (this.origin_dock != this.destination_dock) {
+			price+= diffDockFee;
 		}
 		this.price = price;
 		return price;
