@@ -1,6 +1,5 @@
 const request = require('supertest');
 const {app} = require("../dist/app");
-const {resetDb} = require("dbSetup");
 
 afterAll(async (done) => {
     await new Promise(resolve => setTimeout(() => resolve(), 1000)); // PLUS THE HACK PROVIDED BY @yss14
@@ -8,7 +7,6 @@ afterAll(async (done) => {
 });
 
 beforeAll(async (done) => {
-    resetDb();
 });
 
 describe('Authentication', () => {

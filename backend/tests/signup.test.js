@@ -1,6 +1,5 @@
 const request = require('supertest');
 const {app} = require("../dist/app");
-const {resetDb} = require("dbSetup");
 
 afterAll(async (done) => {
     await new Promise(resolve => setTimeout(() => resolve(), 1000)); // PLUS THE HACK PROVIDED BY @yss14
@@ -8,7 +7,6 @@ afterAll(async (done) => {
 });
 
 beforeAll(async (done) => {
-    resetDb();
 });
 
 describe('Signup', () => {
@@ -47,12 +45,12 @@ describe('Signup', () => {
                 expect(res.body).toHaveProperty('billing_address');
             });
 
-    });
+    },10000);
     it('Sign out of Account', async () => {
         agent
             .post('/api/accounts/logout')
             .then((res) => {
                 expect(res.statusCode).toEqual(200);
             });
-    });
+    },10000);
 })

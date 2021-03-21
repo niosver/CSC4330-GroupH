@@ -7,7 +7,7 @@
     "start": "ts-node src/server.ts",
     "watch": "nodemon src/server.ts",
     "prod": "node ./dist/server.js",
-    "test": "jest --runInBand",
+    "test": "jest",
     "build": "tsc --build",
     "clean": "tsc --build --clean"
   },
