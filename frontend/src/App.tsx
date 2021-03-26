@@ -6,6 +6,7 @@ import './App.css';
 import { Dashboard } from './pages/Dashboard';
 import { Routes } from './Routes';
 import { Transaction } from './views/customer';
+import { Docks } from './views/customer/Docks';
 
 const App: React.FC = () => {
     Routes.forEach((route) => console.log(route.path));
@@ -40,7 +41,9 @@ const App: React.FC = () => {
 
                     {/* DEV ROUTES BEGIN*/}
                     <Route path="/dev/dashboard">
-                        <Dashboard />
+                        <Dashboard>
+                            <Docks />
+                        </Dashboard>
                     </Route>
                     <Route path="/dev/transaction">
                         <Transaction />
