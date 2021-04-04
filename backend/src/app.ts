@@ -75,6 +75,6 @@ app.use("/api/transactions", transactions);
 
 app.use("/api/docks",docks);
 
-app.use("/api/reports",)
+app.use("/api/reports",reports);
 
 export { app };

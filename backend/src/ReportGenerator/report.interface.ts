@@ -3,8 +3,19 @@ export class Report {
     total_rentals: number;
     docks: DockReport[];
     constructor(rev:number,rent:number) {
-        this.total_revenue = rev;
-        this.total_rentals = rent;
+        if(rev != null) {
+            this.total_revenue = rev;
+        }
+        else {
+            this.total_revenue = 0;
+        }
+        if(rent!=null) {
+            this.total_rentals = rent;
+        }
+        else {
+            this.total_rentals = 0;
+        }
+        
         this.docks = [];
     }
     push(dock:DockReport) {
@@ -23,7 +34,12 @@ export class DockReport {
         this.bike_dock_number = dock;
         this.location = loc;
         this.number_of_rentals = num;
-        this.revenue = rev;
+        if(rev != null) {
+            this.revenue = rev;
+        }
+        else {
+            this.revenue = 0;
+        }
         this.bikes_returned_other_dock = undefined;
         this.other_rentals_returned_here = undefined;
     }
