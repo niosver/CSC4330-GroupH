@@ -1,7 +1,7 @@
 const request = require('supertest');
 const {app} = require("../dist/app");
 
-describe('Test Manager Creation', () => {
+describe('Test Report Generation', () => {
     const agent = request.agent(app)
     it('Login to owner account', async () => {
         return agent
@@ -15,26 +15,44 @@ describe('Test Manager Creation', () => {
                 agent.jar.setCookie(res.headers['set-cookie'][0]);
             });
     });
-    it('Create Manager', async () => {
+    it('Regenerate Report', async () => {
         return agent
-            .post('/api/accounts/create_manager')
+            .get('/api/reports/regenerate_report')
             .send({
-                password: 'password',
-                username: 'man2',
             })
             .then((res) => {
                 expect(res.statusCode).toEqual(200);
             });
     });
-    it('Login to manager account', async () => {
+    it('Retrieve Report', async () => {
+        return agent
+            .get('/api/reports/get_report')
+            .send({
+            })
+            .then((res) => {
+                expect(res.statusCode).toEqual(200);
+            });
+    });
+    it('Login to non-owner account', async () => {
         return agent
             .post('/api/accounts/login')
             .send({
                 password: 'password',
-                username: 'man2',
+                username: 'man1',
             })
             .then((res) => {
                 expect(res.statusCode).toEqual(200);
+                agent.jar.setCookie(res.headers['set-cookie'][0]);
             });
     });
+    it('Retrieve Report', async () => {
+        return agent
+            .get('/api/reports/get_report')
+            .send({
+            })
+            .then((res) => {
+                expect(res.statusCode).toEqual(400);
+            });
+    });
+
 })
