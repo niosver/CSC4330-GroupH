@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import accounts from "./Account/account.service";
 import customers from "./Customer/customer.service";
 import transactions from "./Transaction/transaction.service";
+import reports from "./ReportGenerator/report.service";
 import docks from "./Dock/dock.service";
 import session from "express-session";
 import { Logger, RequestLogger } from "./Logger";
@@ -73,5 +74,7 @@ app.use("/api/customers", customers);
 app.use("/api/transactions", transactions);
 
 app.use("/api/docks",docks);
+
+app.use("/api/reports",)
 
 export { app };
