@@ -17,10 +17,10 @@ const db = makeDb(config);
 var results:any;
 var result:any;
 var dock:DockReport;
-const rent_rev = "SELECT SUM(price) AS rev,Count(*) AS num FROM Transaction WHERE status=\"complete\";";
-const dock_info = "SELECT origin_dock,location,Count(*) AS num,SUM(price) AS rev FROM Transaction LEFT JOIN BikeDock ON Transaction.origin_dock = BikeDock.bike_dock_number WHERE status=\"complete\" AND origin_dock=?;";
-const diff_return = "SELECT Count(*) AS num FROM Transaction WHERE origin_dock=? AND destination_dock!=?;";
-const diff_rent = "SELECT Count(*) As num FROM Transaction WHERE origin_dock!=? AND destination_dock=?;";
+const rent_rev = "SELECT SUM(price) AS rev,Count(*) AS num FROM Transaction WHERE status=\"complete\" AND start_date >= curdate() - INTERVAL 1 WEEK;";
+const dock_info = "SELECT origin_dock,location,Count(*) AS num,SUM(price) AS rev FROM Transaction LEFT JOIN BikeDock ON Transaction.origin_dock = BikeDock.bike_dock_number WHERE status=\"complete\" AND origin_dock=? AND start_date >= curdate() - INTERVAL 1 WEEK;";
+const diff_return = "SELECT Count(*) AS num FROM Transaction WHERE origin_dock=? AND destination_dock!=? AND start_date >= curdate() - INTERVAL 1 WEEK;";
+const diff_rent = "SELECT Count(*) As num FROM Transaction WHERE origin_dock!=? AND destination_dock=?AND start_date >= curdate() - INTERVAL 1 WEEK;";
 const get_loc = "SELECT location FROM BikeDock WHERE bike_dock_number=?;";
 export async function gen() {
 	try {
