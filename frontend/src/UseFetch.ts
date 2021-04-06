@@ -5,6 +5,7 @@ axios.interceptors.request.use(
     (config: AxiosRequestConfig) => {
         if (process.env.NODE_ENV == 'development') {
             console.log(config);
+            return new Promise((resolve) => setTimeout(() => resolve(config), 1000)); // simulate 1 second response delay
         }
         return config;
     },
@@ -84,17 +85,9 @@ export enum UseFetchLifecycle {
  * }
  * 
  * @example
- * //MountAndUpdate Example: My component needs most recent request
- * const Component = () => {
- *   // display dock info when component mounts and updates
- *   res = useFetch(getDocksConfig, UseFetchLifecycle.MountAndUpdate) 
- *   return(...)
- * }
- * 
- * @example
  * //Update Example: My component should only make request on event trigger
  * const Component = () => {
- *   [rentConfig, setRentConfig] = useState({...})
+ *   const [rentConfig, setRentConfig] = useState({...})
  *   // trigger config update through onSubmit invocation from button onClick function
  *   const onSubmit = (dockNumber) => () => setState(prev => ({...prev, data: dockNumber}))
  *   // submit rent for bike when config updates i.e. submit button triggers config update
@@ -105,6 +98,21 @@ export enum UseFetchLifecycle {
  *   ...
  *   )
  * }
+ * 
+ * @example
+ * //MountAndUpdate Example: My component needs initial request and on event trigger
+ * const Component = () => {
+ *   // display dock info when component mounts 
+ *   // invoking setDockConfig triggers update
+ *   const [dockConfig, setDockConfig] = useState({...})
+ *   res = useFetch(dockConfig, UseFetchLifecycle.MountAndUpdate) 
+ *   return(
+ *   ...
+ *   <button onClick={() => setDockConfig(dockConfig)}>update</button> 
+ *   ...
+ *   )
+ * }
+ * 
  * @example
  * //display return values
  * const Component = () => {
@@ -124,25 +132,47 @@ export const useFetch = <T>(config: FetchConfig, lifecycle: UseFetchLifecycle) =
     const [response, setResponse] = useState<AxiosResponse<T> | null>(null);
     const [error, setError] = useState<AxiosError<T> | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const isInitialMount = useRef(true);
+    let isInitialMount = useRef(true); // Allows isInitialMount to preserve value in component updates
+    /* UseEffect dependency argument:
+        - empty array indicates useEffect will only be invoked on component mount
+        - non-empty array indicates useEffect will be invoked on component mount and when the array contents change
+        - source: https://reactjs.org/docs/hooks-effect.html 
+     */
     const dependency = lifecycle === UseFetchLifecycle.Mount ? [] : [config];
     useEffect(() => {
+        let isSubscribed = true; // variable for canceling side-effects if component unmounts
         const fetchData = async () => {
             setIsLoading(true);
+            setResponse(null);
+            setError(null);
             try {
                 const res = await axios.request<T>(config);
-                setResponse(res);
+                isSubscribed && setResponse(res); //prevent invocation if component is unmounted
             } catch (error) {
-                setError(error as AxiosError<T>);
+                isSubscribed && setError(error as AxiosError<T>);
             } finally {
-                setIsLoading(false);
+                isSubscribed && setIsLoading(false);
             }
         };
+        /* If lifecycle is set to "UPDATE", fetchData will not be called until config is updated */
         if (lifecycle === UseFetchLifecycle.Update && isInitialMount.current) {
-            isInitialMount.current = false;
+            isInitialMount.current = false; //allows fetchData to be called on next update
         } else {
             fetchData();
         }
+        /* 
+           Cleanup function to cancel all side-effects if component unmounts
+           see: https://stackoverflow.com/questions/56450975/to-fix-cancel-all-subscriptions-and-asynchronous-tasks-in-a-useeffect-cleanup-f
+           For example:
+             1) User opens Rent page
+             2) Rent page fetches bike docks
+             3) User switches to home page before fetch is complete
+             4) Rent page unmounts and home page mounts
+             4) Cleanup function cancels setResponse/setLoading/setError to prevent memory leak from unmounted Rent page
+        */
+        return () => {
+            isSubscribed = false;
+        };
     }, dependency);
     return { response, error, isLoading };
 };
