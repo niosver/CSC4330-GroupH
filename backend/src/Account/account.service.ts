@@ -75,6 +75,7 @@ router.post("/create_manager", async function (req, res) {
 	try {
 		let account = req.session.username;
 		let type = await db.query(check_account_type, [account]);
+		type = type[0].account_type
 		if (type != Account_Type.manager && type != Account_Type.owner) {
 			res.status(500).send("Account does not have required permissions");
 			return;
