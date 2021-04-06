@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from 'auth';
 import { SignUpForm } from 'components/forms';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm, UseFormMethods } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import { HomePath } from 'Routes';
@@ -17,7 +17,6 @@ export const SignUp: React.FC = () => {
     const history = useHistory();
     const auth = useAuth();
     const [state, setState] = React.useState<LoginState>({
-        loading: false,
         submissionError: null,
     });
 
@@ -35,10 +34,6 @@ export const SignUp: React.FC = () => {
             setState((prevState) => ({ ...prevState, submissionError: null }));
         }
     };
-    useEffect(() => {
-        setState((prevState) => ({ ...prevState, loading: auth.loading }));
-        console.log(`auth_loading: ${auth.loading}`, `state_loading: ${state.loading}`);
-    }, [auth.loading]);
 
     return (
         <SignUpForm
