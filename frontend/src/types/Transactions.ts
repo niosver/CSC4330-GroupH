@@ -8,6 +8,7 @@ export type RentRes = {
 /* Return */
 export type ReturnReq = {
     transaction_id: number;
+    destination_dock: number;
 };
 export type ReturnRes = {
     price: number;
@@ -25,4 +26,5 @@ export type DockRes = {
 };
 /* Current Transactions */
 export type ActiveTransReq = {};
-export type ActiveTransRes = { transaction_ids: number[] };
+type Transaction = { transaction_id: number; origin_dock: number; start_date: Date };
+export type ActiveTransRes = { active_transactions: Transaction[] };
