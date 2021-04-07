@@ -7,11 +7,12 @@ import {
     TableCell,
     TableHead,
     TableRow,
+    Typography,
 } from '@material-ui/core';
 import { ContentSpinner } from 'components/ContentSpinner';
 import { RentDialog } from 'components/RentDialog';
 import Title from 'components/Title';
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import type { DockRes, RentRes } from 'types/Transactions';
 import { FetchConfig, useFetch, UseFetchLifecycle } from 'UseFetch';
 
@@ -32,21 +33,19 @@ type State = {
 
 export const Rent: React.FC = () => {
     const classes = useStyles();
-    /* State for selected dock and dialog open */
 
-    const [state, setState] = React.useState<State>({ open: false, dock: 0 });
+    /* State for selected dock and dialog open */
+    const [state, setState] = useState<State>({ open: false, dock: 0 });
 
     /* Fetch Request for Docks */
-
-    const [dockConfig, setDockConfig] = React.useState<FetchConfig>({
+    const [dockConfig, setDockConfig] = useState<FetchConfig>({
         url: '/api/docks/get_docks',
         method: 'GET',
     });
     const dockRes = useFetch<DockRes>(dockConfig, UseFetchLifecycle.MountAndUpdate); // fetch when config initializes and updates
 
     /* Fetch Request for Rent */
-
-    const [actionConfig, setActionConfig] = React.useState<FetchConfig>({
+    const [actionConfig, setActionConfig] = useState<FetchConfig>({
         url: '/api/transactions/rent',
         method: 'POST',
         data: {
@@ -55,42 +54,66 @@ export const Rent: React.FC = () => {
     });
     const actionRes = useFetch<RentRes>(actionConfig, UseFetchLifecycle.Update); // only fetch when config updates
 
-    /* Handler functions for buttons/dialog */
-
+    /* Handler functions for rent button */
     const openDialogue = (dockNumber: number) => () => {
         setState((prevState) => ({ ...prevState, open: true, dock: dockNumber }));
     };
 
-    const handleClose = () => {
+    /* Handler function for dialog cancel button */
+    const handleCancel = () => {
         setState((prevState) => ({ ...prevState, open: false }));
     };
+
+    /* Handler function for dialog submit button */
     const handleSubmit = () => {
         setState((prevState) => ({ ...prevState, open: false }));
-        setDockConfig((prevState) => ({ ...prevState })); // config update triggers fetch
         setActionConfig((prevState) => ({ ...prevState, data: { dock: state.dock } })); //config update triggers fetch
     };
+
+    /* Callback ref for reloading Docks after renting */
+    const ref = useCallback((node: HTMLDivElement) => {
+        if (node != null) {
+            setDockConfig((prevState) => ({ ...prevState })); // config update triggers fetch
+        }
+    }, []);
+
     return (
-        <React.Fragment>
+        <>
             {/* RESPONSE */}
             {actionRes.isLoading && (
                 <Container>
+                    {process.env.NODE_ENV === 'development' && (
+                        <span>
+                            <Typography>
+                                <em>(DEV):</em> <strong>Rent</strong>
+                            </Typography>
+                        </span>
+                    )}
                     <ContentSpinner />
                 </Container>
             )}
             {actionRes.error && (
-                <Container>
+                /*Trigger ref callback if Container is rendered*/
+                <Container ref={ref}>
                     <Title>{`${actionRes.error.response?.data} for bike at dock ${state.dock}`}</Title>
                 </Container>
             )}
             {actionRes.response && (
-                <Container>
-                    {/* @ts-ignore */}
-                    <Title>{actionRes.response.data.trans_id}</Title>
+                /*Trigger ref callback if Container is rendered*/
+                <Container ref={ref}>
+                    <Title>{actionRes.response.data.transaction_id}</Title>
                 </Container>
             )}
             {/* TABLE WITH DOCKS */}
             {dockRes.isLoading && (
                 <Container>
+                    {process.env.NODE_ENV === 'development' && (
+                        <span>
+                            <Typography>
+                                <em>(DEV):</em> <strong>Docks</strong>
+                            </Typography>
+                        </span>
+                    )}
                     <ContentSpinner />
                 </Container>
             )}
@@ -113,8 +136,9 @@ export const Rent: React.FC = () => {
                         </TableHead>
                         <RentDialog
                             isOpen={state.open}
-                            handleClose={handleClose}
+                            handleCancel={handleCancel}
                             handleSubmit={handleSubmit}
+                            keepMounted
                         />
                         <TableBody>
                             {dockRes.response.data.bike_docks.map((dock, idx) => (
@@ -136,6 +160,6 @@ export const Rent: React.FC = () => {
                     </Table>
                 </Container>
             )}
-        </React.Fragment>
+        </>
     );
 };
