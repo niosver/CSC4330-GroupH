@@ -3,6 +3,10 @@ import DirectionsBikeRoundedIcon from '@material-ui/icons/DirectionsBikeRounded'
 import HistoryRoundedIcon from '@material-ui/icons/HistoryRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import LocalOfferRoundedIcon from '@material-ui/icons/LocalOfferRounded';
+import SupervisorAccountRoundedIcon from '@material-ui/icons/SupervisorAccountRounded';
+import AttachMoneyRoundedIcon from '@material-ui/icons/AttachMoneyRounded';
+import AssignmentRoundedIcon from '@material-ui/icons/AssignmentRounded';
+import ReceiptRoundedIcon from '@material-ui/icons/ReceiptRounded';
 import { CustomerView, ManagerView, OwnerView, SharedView } from './views';
 import { UserRole } from 'types/User';
 import React from 'react';
@@ -52,7 +56,7 @@ export const Routes = [
 
     {
         title: 'VerifyPurchases',
-        icon: null, //tbd
+        icon: <ReceiptRoundedIcon />,
         content: ManagerView.VerifyPurchases,
         path: '/dashboard/verifypurchases',
         account_type: UserRole.Manager,
@@ -61,21 +65,21 @@ export const Routes = [
 
     {
         title: 'Management',
-        icon: null, //tbd
+        icon: <SupervisorAccountRoundedIcon />,
         content: OwnerView.Management,
         path: '/dashboard/management',
         account_type: UserRole.Owner,
     },
     {
         title: 'PriceControl',
-        icon: null, //tbd
+        icon: <AttachMoneyRoundedIcon />,
         content: OwnerView.PriceControl,
         path: '/dashboard/pricecontrol',
         account_type: UserRole.Owner,
     },
     {
         title: 'Reports',
-        icon: null, //tbd
+        icon: <AssignmentRoundedIcon />,
         content: OwnerView.Reports,
         path: '/dashboard/reports',
         account_type: UserRole.Owner,

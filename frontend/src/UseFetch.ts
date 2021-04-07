@@ -57,6 +57,11 @@ export enum UseFetchLifecycle {
     Update = 'UPDATE',
     MountAndUpdate = 'MOUNT_AND_UPDATE',
 }
+export type UseFetchResponse<T> = {
+    response: AxiosResponse<T> | null;
+    error: AxiosError<T> | null;
+    isLoading: boolean;
+};
 /**
  * Custom React hook wrapper for Axios. Stores response, error, and loading data for a request that asynchronously updates
  * in 3 stages:
@@ -128,7 +133,10 @@ export enum UseFetchLifecycle {
  * @adapted from @link {https://www.digitalocean.com/community/tutorials/creating-a-custom-usefetch-react-hook} 
 
  */
-export const useFetch = <T>(config: FetchConfig, lifecycle: UseFetchLifecycle) => {
+export const useFetch = <T>(
+    config: FetchConfig,
+    lifecycle: UseFetchLifecycle
+): UseFetchResponse<T> => {
     const [response, setResponse] = useState<AxiosResponse<T> | null>(null);
     const [error, setError] = useState<AxiosError<T> | null>(null);
     const [isLoading, setIsLoading] = useState(false);
