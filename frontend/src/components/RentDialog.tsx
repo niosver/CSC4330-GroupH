@@ -10,21 +10,25 @@ import React from 'react';
 
 type Props = {
     isOpen: boolean;
-    handleClose: () => void;
+    handleCancel: () => void;
     handleSubmit: () => void;
+    keepMounted: boolean;
 };
 export const RentDialog: React.FC<Props> = (props) => {
-    const { isOpen, handleClose, handleSubmit } = props;
+    const { isOpen, handleCancel, handleSubmit, ...rest } = props;
     return (
         <Dialog
+            disableBackdropClick
+            disableEscapeKeyDown
             open={isOpen}
-            onClose={handleClose}
+            onClose={handleCancel}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
+            {...rest}
         >
             <DialogTitle id="alert-dialog-title">{'Bike Rental Agreement'}</DialogTitle>
             <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText id="alert-dialog-description" component={'span'}>
                     Rental Cost and fees
                     <ul>
                         <li>$5 per half hour</li>
@@ -58,7 +62,7 @@ export const RentDialog: React.FC<Props> = (props) => {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={handleCancel} color="primary">
                     Disagree
                 </Button>
                 <Button onClick={handleSubmit} color="primary" autoFocus>
