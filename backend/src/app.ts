@@ -5,11 +5,12 @@ import dotenv from "dotenv";
 import accounts from "./Account/account.service";
 import customers from "./Customer/customer.service";
 import transactions from "./Transaction/transaction.service";
+import reports from "./ReportGenerator/report.service";
 import docks from "./Dock/dock.service";
 import session from "express-session";
 import { Logger, RequestLogger } from "./Logger";
 import bodyParser from "body-parser";
-
+import {gen} from "./ReportGenerator/reportGen"
 declare module "express-session" {
 	export interface SessionData {
 		username: string;
@@ -65,6 +66,11 @@ app.locals.db = db;
 // setInterval(async () => {
 // 	await db.ping();
 // }, 1000);
+const WEEK = 1000 * 60 * 60 * 24 * 7
+
+setInterval(async() => {
+	await gen()
+},WEEK);
 
 app.use("/api/accounts", accounts);
 
@@ -73,5 +79,7 @@ app.use("/api/customers", customers);
 app.use("/api/transactions", transactions);
 
 app.use("/api/docks",docks);
+
+app.use("/api/reports",reports);
 
 export { app };

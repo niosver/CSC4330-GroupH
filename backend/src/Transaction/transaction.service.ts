@@ -14,8 +14,9 @@ const insert_trans =
 const update_trans =
 	"UPDATE Transaction SET end_date=?,price=?,destination_dock=?,status=? WHERE transaction_id=?;";
 const add_fee = "UPDATE Transaction SET damage_fee=? WHERE transaction_id=?;";
-const lookup_trans ="SELECT * FROM Transaction WHERE transaction_id=? AND customer_id=? AND status=\"in_progress\";";
-const get_trans = "SELECT * FROM Transaction WHERE customer_id=? AND status=\"in_progress\";";
+const lookup_trans =
+	'SELECT * FROM Transaction WHERE transaction_id=? AND customer_id=? AND status="in_progress";';
+const get_trans = 'SELECT * FROM Transaction WHERE customer_id=? AND status="in_progress";';
 const get_bike_number = "SELECT * FROM BikeDock WHERE bike_dock_number=?;";
 const insert_bike_number = "UPDATE BikeDock SET number_of_bikes=? WHERE bike_dock_number=?;";
 
@@ -24,7 +25,7 @@ router.post("/rent", async function (req, res, next) {
 	let json = req.body;
 	let result;
 	try {
-		if(!req.session.customer_id) {
+		if (!req.session.customer_id) {
 			res.status(400).send("Please login");
 			return next();
 		}
@@ -47,17 +48,16 @@ router.post("/rent", async function (req, res, next) {
 			trans.status,
 		]);
 		const trans_id = result.insertId;
-		result = await db.query(get_bike_number,[json.dock]);
-		if(result[0].number_of_bikes>0) {
-			let num = result[0].number_of_bikes-1;
-			result = await db.query(insert_bike_number,[num,json.dock]);
-		}
-		else {
+		result = await db.query(get_bike_number, [json.dock]);
+		if (result[0].number_of_bikes > 0) {
+			let num = result[0].number_of_bikes - 1;
+			result = await db.query(insert_bike_number, [num, json.dock]);
+		} else {
 			db.rollback();
 			res.status(400).send("Unable to rent bike");
 			return next();
 		}
-		
+
 		if (trans_id >= 0) {
 			db.commit();
 			res.status(200).send({ transaction_id: trans_id });
@@ -68,37 +68,21 @@ router.post("/rent", async function (req, res, next) {
 		res.status(400).send("Unable to process rental");
 	}
 });
-/*
-Current implementation of storing transactions in memory does not work. For example:
-	1. user logs in as user1 => session: {customer_id: 1, transactions: []}
-	2. user1 rents bike from dock 1 => session: {customer_id: 1, transactions: [3]}
-	3. user1 logs out  => session: undefined
-	4. user1 logs back in => session: {customer_id: 1, transactions: []}
-	5. user1 returns bike to dock 1 => {customer_id: 1, transactions: []} => [] does not contain 3
-	
-Fix1: remove transactions entirely from session and just query in this function
-	- await `SELECT * FROM Transaction WHERE transaction_id=id1, customer_id=id2, status=in_progress`
 
-Fix2: initialize transactions in session inside login function
-	- req.session.current_transaction = await `SELECT * FROM Transaction WHERE customer_id=id, status=in_progress`
-	- may be complicated to add `if customer` check
-	- adds additional error case for login if transaction query fails
-
-*/
 router.post("/return", async function (req, res, next) {
 	let db = req.app.locals.db;
 	let json = req.body;
 	let now = new Date();
 	let result;
 	try {
-		if(!req.session.customer_id) {
+		if (!req.session.customer_id) {
 			res.status(400).send("Please login");
 			return next();
 		}
 		const request_trans_id = parseInt(json.transaction_id, 10); // extra safety in case transaction_id is sent as string
 		db.beginTransaction();
-		result = await db.query(lookup_trans,[request_trans_id,req.session.customer_id]);
-		if(result.length>0) {
+		result = await db.query(lookup_trans, [request_trans_id, req.session.customer_id]);
+		if (result.length > 0) {
 			const trans = result[0];
 			let u_trans = new Transaction(
 				trans.cc_number,
@@ -107,39 +91,36 @@ router.post("/return", async function (req, res, next) {
 				trans.origin_dock
 			);
 			u_trans.set_end_date(now);
-			if(!json.destination_dock) {
-				throw new Error;
+			if (!json.destination_dock) {
+				throw new Error("No destination dock was supplied");
 			}
 			u_trans.set_destination(json.destination_dock);
 			let price = u_trans.calculate_price();
 			u_trans.set_status(Status.complete);
 			await db.query(update_trans, [
-					now,
-					price,
-					json.destination_dock,
-					u_trans.status,
-					json.transaction_id,
-				]);
-			
-			result = await db.query(get_bike_number,[json.destination_dock]);
-			if(result[0].number_of_bikes<6) {
-				let num = result[0].number_of_bikes+1;
-				result = await db.query(insert_bike_number,[num,json.destination_dock]);
-			}
-			else {
+				now,
+				price,
+				json.destination_dock,
+				u_trans.status,
+				json.transaction_id,
+			]);
+
+			result = await db.query(get_bike_number, [json.destination_dock]);
+			if (result[0].number_of_bikes < 6) {
+				let num = result[0].number_of_bikes + 1;
+				result = await db.query(insert_bike_number, [num, json.destination_dock]);
+			} else {
 				db.rollback();
 				res.status(400).send("Unable to return bike");
 				return next();
-			}	
-			
+			}
+
 			db.commit();
 			res.status(200).send({ price: price });
-		}
-		else {
+		} else {
 			db.rollback();
 			res.status(400).send("Unable to find transaction");
 		}
-		
 	} catch (error) {
 		db.rollback();
 		res.status(400).send("Unable to process return");
@@ -152,7 +133,7 @@ router.post("/damage_charge", async function (req, res, next) {
 	let db = req.app.locals.db;
 	let json = req.body;
 	try {
-		if(!(req.session.account_type == Account_Type.manager)) {
+		if (!(req.session.account_type == Account_Type.manager)) {
 			res.status(400).send("Please login as a manager");
 			return next();
 		}
@@ -170,23 +151,23 @@ router.post("/damage_charge", async function (req, res, next) {
 	}
 });
 
-router.get("/active_transactions", async function (req,res,next) {
+router.get("/active_transactions", async function (req, res, next) {
 	let db = req.app.locals.db;
-	let list:number[]=[];
+	type TransRes = { transaction_id: number; origin_dock: number; start_date: Date };
+	let list: TransRes[] = [];
 	try {
-		if(req.session.customer_id) {
-			let result = await db.query(get_trans,[req.session.customer_id]);
-			for(var i=0;i<result.length;i++) {
-				list.push(result[i].transaction_id);
+		if (req.session.customer_id) {
+			let result = await db.query(get_trans, [req.session.customer_id]);
+			for (var i = 0; i < result.length; i++) {
+				const { transaction_id, origin_dock, start_date } = result[i];
+				list.push({ transaction_id, origin_dock, start_date });
 			}
-			res.status(200).send({transaction_ids: list});
-		}
-		else {
+			res.status(200).send({ active_transactions: list });
+		} else {
 			res.status(400).send("Unable to determine customer_id, are you logged it?");
 			return next();
 		}
-	}
-	catch (error) {
+	} catch (error) {
 		res.status(400).send("Unable to process request");
 		Logger.log(error, Logger.ERROR);
 	}

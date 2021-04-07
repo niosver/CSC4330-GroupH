@@ -172,6 +172,7 @@ export const Dashboard: React.FC = ({ children }) => {
                 }}
                 open={open}
                 handleDrawerClose={handleDrawerClose}
+                account_type={auth.user?.account_type}
             />
 
             <main className={classes.content}>

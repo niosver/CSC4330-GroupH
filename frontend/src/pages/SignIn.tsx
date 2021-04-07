@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from 'auth';
 import { SignInForm } from 'components/forms';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm, UseFormMethods } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import { HomePath } from 'Routes';
@@ -12,7 +12,6 @@ export const SignIn: React.FC = () => {
     const history = useHistory();
     const auth = useAuth();
     const [state, setState] = React.useState<LoginState>({
-        loading: auth.loading,
         submissionError: '',
     });
 
@@ -23,18 +22,10 @@ export const SignIn: React.FC = () => {
         const status = await auth.signIn(data as UserLogin, () => history.push(HomePath));
         if (!status) {
             setState({
-                loading: auth.loading,
                 submissionError: 'Incorrect username or password',
             });
-        } else {
-            setState({ loading: auth.loading, submissionError: null });
         }
     };
-
-    useEffect(() => {
-        setState((prevState) => ({ ...prevState, loading: auth.loading }));
-        console.log(`auth_loading: ${auth.loading}`, `state_loading: ${state.loading}`);
-    }, [auth.loading]);
 
     return (
         <SignInForm

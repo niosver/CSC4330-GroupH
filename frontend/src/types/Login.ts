@@ -2,7 +2,6 @@ import { UseFormMethods } from 'react-hook-form/dist/types';
 
 /** Type for state held in Login component */
 export type LoginState = {
-    loading: boolean;
     submissionError: string | null;
 };
 /** Type for required props of React child components rendered by Login component*/

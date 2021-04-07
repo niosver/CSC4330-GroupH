@@ -10,6 +10,20 @@ type AuthGuardProps = {
     redirect: string;
     account_type: UserRole;
 };
+/**
+ * Controller component for managing user access to restricted routes. Redirects unauthorized users to "authRedirect" path and
+ * unauthenticated users to "redirect" path specified by props.
+ *
+ * Note: This component is for hiding page layouts to unauthenticated users. Child components should not contain sensitive data
+ * or make any unsecure requests. Authentication is handled server-side and accessing any data should require authentication with the
+ * server through requests with an attatched http-only cookie.
+ *
+ * @param {AuthGuardProps} props
+ * @returns {React.ReactNode}
+ *   Child component if user is authenticated and has access to route
+ * | AuthRedirect component if user is authenticated and does NOT have access to route
+ * | Redirect component if user is NOT authenticated
+ */
 export const AuthGuard: React.FC<AuthGuardProps> = (props) => {
     const { children, path, authRedirect, redirect, account_type } = props;
     const auth = useAuth();
