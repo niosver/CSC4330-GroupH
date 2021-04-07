@@ -17,7 +17,7 @@ export const Landing: React.FC = () => {
         <>
             <NavBar />
             <Container className={classes.paper}>
-                <Typography variant="h1">Bike Company Name Goes Here</Typography>
+                <Typography variant="h1">Bike App</Typography>
                 <Typography variant="body1">
                     Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta sapiente odit
                     repellat numquam. Quae rerum minima fugit ab consequuntur corporis fugiat

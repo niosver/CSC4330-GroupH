@@ -11,18 +11,21 @@ import {
     Typography,
     Box
 } from "@material-ui/core";
-import {
-    ArrowBack,
-    AssignmentInd,
-    Home,
-    Apps,
-    ContactMail
-} from "@material-ui/icons";
+import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
+
+const useStyles = makeStyles((theme) => ({
+    navbar: {
+        background: "#222",
+        position: "static"
+    }
+}));
 
 export const NavBar: React.FC = () => {
+    const classes = useStyles();
     return(
         <Box component="nav">
-            <AppBar position="static" style={{background: "#222"}}>
+            <AppBar className={classes.navbar}>
                 <Toolbar>
                     <Typography color="inherit">
                         Bike App
