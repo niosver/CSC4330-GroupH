@@ -19,7 +19,7 @@ type Props = {
     dockRes: UseFetchResponse<DockRes>;
     isOpen: boolean;
     handleCancel: () => void;
-    handleSubmit: () => void;
+    handleSubmit: (dock: number) => () => void;
     keepMounted: boolean;
     value: number;
 };
@@ -82,7 +82,7 @@ export const ReturnDialog: React.FC<Props> = (props) => {
                         <Button onClick={handleCancel} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={handleSubmit} color="primary" autoFocus>
+                        <Button onClick={handleSubmit(value)} color="primary" autoFocus>
                             Confirm
                         </Button>
                     </DialogActions>

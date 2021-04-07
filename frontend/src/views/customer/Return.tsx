@@ -74,13 +74,13 @@ export const Return: React.FC = () => {
     };
 
     /* Handler function for dialog submit button */
-    const handleSubmit = () => {
-        setState((prevState) => ({ ...prevState, open: false }));
+    const handleSubmit = (dock: number) => () => {
+        setState((prevState) => ({ ...prevState, open: false, dock: dock }));
         setReturnConfig((prevState) => ({
             ...prevState,
             data: {
                 transaction_id: state.transaction_id,
-                destination_dock: state.dock,
+                destination_dock: dock,
             },
         })); //config update triggers fetch
     };
