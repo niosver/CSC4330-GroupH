@@ -1,4 +1,5 @@
 import { AuthGuard, AuthProvider } from 'auth';
+import { PageSpinner } from 'components/PageSpinner';
 import { Landing, SignIn, SignUp } from 'pages';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
@@ -44,6 +45,9 @@ const App: React.FC = () => {
                     </Route>
                     <Route path="/dev/transaction">
                         <Transaction />
+                    </Route>
+                    <Route path="/dev/spinner">
+                        <PageSpinner />
                     </Route>
                     {/* DEV ROUTES END */}
                 </Switch>

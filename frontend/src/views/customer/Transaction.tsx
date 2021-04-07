@@ -62,18 +62,17 @@ export const Transaction: React.FC = () => {
                 <Typography variant="h3" align="center" component="h1" gutterBottom>
                     Bike Transaction
                 </Typography>
-            </Container> 
-                <Typography variant="h4" align="center" component="h1" gutterBottom>
-                    Fee Agreement
-                </Typography> 
-                <Typography variant="h5" align="center" component="h1" gutterBottom>
-                    This agreement is a contract that sets forth terms as a binding agreement between Dowling Inc.
-                    and the bike user. The list of fees are calculated as such
-                </Typography>
-                
+            </Container>
+            <Typography variant="h4" align="center" component="h1" gutterBottom>
+                Fee Agreement
+            </Typography>
+            <Typography variant="h5" align="center" component="h1" gutterBottom>
+                This agreement is a contract that sets forth terms as a binding agreement between
+                Dowling Inc. and the bike user. The list of fees are calculated as such
+            </Typography>
             <Container component="main" className={classes.main} maxWidth="lg">
                 <form text-align="center" className={classes.root} noValidate autoComplete="off">
-                    <div> 
+                    <div>
                         <TextField
                             id="time-rented"
                             select
@@ -94,11 +93,6 @@ export const Transaction: React.FC = () => {
                     </div>
                 </form>
             </Container>
-            <footer className={classes.footer}>
-                <Container maxWidth="sm">
-                    <Typography variant="body1">My sticky footer can be found here.</Typography>
-                </Container>
-            </footer>
         </div>
     );
 };

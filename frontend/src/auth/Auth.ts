@@ -1,13 +1,13 @@
 import axios from 'axios';
-import { UserCreation, UserLogin, UserPublic } from 'types/User';
+import type { UserCreation, UserLogin, UserPublic } from 'types/User';
 import type { FetchConfig } from 'UseFetch';
+import { beginLoading, endLoading } from './AuthActions';
 
 /** Interface for authentication object
  * @typedef user
  */
 export interface IAuth {
     user: UserPublic | null;
-    loading: boolean;
     init(callback: () => void): Promise<boolean>;
     signIn(userLogin: UserLogin, callback: () => void): Promise<boolean>;
     signUp(userCreation: UserCreation, callback: () => void): Promise<boolean>;
@@ -23,12 +23,12 @@ export interface IAuth {
  */
 export class Auth implements IAuth {
     public user: UserPublic | null;
-    public loading: boolean;
+    private dispatch: any;
 
     /** Initialize authentication object with no user signed-in */
-    constructor() {
+    constructor(dispatch: any) {
         this.user = null;
-        this.loading = false;
+        this.dispatch = dispatch;
     }
     /**
      * Method to sign-in user from http-only cookie by:
@@ -43,8 +43,8 @@ export class Auth implements IAuth {
      *                           | to false on sign-in failure
      */
     public async init(callback: () => void): Promise<boolean> {
-        this.loading = true;
         let success = false;
+        beginLoading(this.dispatch);
         try {
             const config: FetchConfig = {
                 url: '/api/accounts/me',
@@ -60,8 +60,7 @@ export class Auth implements IAuth {
         } catch (error) {
             console.error(error);
         } finally {
-            this.loading = false;
-            console.log('Auth: ', this.loading);
+            endLoading(this.dispatch);
             return success;
         }
     }
@@ -77,8 +76,8 @@ export class Auth implements IAuth {
      *                           | to false on sign-in failure
      */
     public async signIn(userLogin: UserLogin, callback: () => void): Promise<boolean> {
-        this.loading = true;
         let success = false;
+        beginLoading(this.dispatch);
         try {
             const config: FetchConfig = {
                 url: '/api/accounts/login',
@@ -97,7 +96,7 @@ export class Auth implements IAuth {
         } catch (error) {
             console.error(error);
         } finally {
-            this.loading = false;
+            endLoading(this.dispatch);
             return success;
         }
     }
@@ -113,8 +112,8 @@ export class Auth implements IAuth {
      *                           | to false on sign-up failure
      */
     public async signUp(userCreation: UserCreation, callback: () => void): Promise<boolean> {
-        this.loading = true;
         let success = false;
+        beginLoading(this.dispatch);
         try {
             const { confirmPassword, ...rest } = userCreation;
             const config: FetchConfig = {
@@ -132,7 +131,7 @@ export class Auth implements IAuth {
         } catch (error) {
             console.error(error);
         } finally {
-            this.loading = false;
+            endLoading(this.dispatch);
             return success;
         }
     }
@@ -150,9 +149,9 @@ export class Auth implements IAuth {
      *                           | promise resolving to false on sign-out failure
      */
     public async signOut(callback: () => void): Promise<boolean> {
-        this.loading = true;
         this.user = null;
         let success = false;
+        beginLoading(this.dispatch);
         try {
             const config: FetchConfig = {
                 url: '/api/accounts/logout',
@@ -167,7 +166,7 @@ export class Auth implements IAuth {
         } catch (error) {
             console.error(error);
         } finally {
-            this.loading = false;
+            endLoading(this.dispatch);
             return success;
         }
     }
