@@ -1,37 +1,56 @@
-import React, { useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { HomePath } from 'Routes';
+import React, { useReducer } from 'react';
+import { AuthLoadingState } from 'types/Auth';
 import { Auth } from './Auth';
-import { AuthContext, useAuth } from './AuthContext';
+import {
+    AuthContext,
+    AuthDispatchContext,
+    AuthLoadingStateContext,
+    useAuthDispatch,
+} from './AuthContext';
+import { AuthController } from './AuthController';
+import { AuthReducer } from './AuthReducer';
 
-const AuthInitializer: React.FC = ({ children }) => {
-    const location = useLocation();
-    const history = useHistory();
-    const auth = useAuth();
-    useEffect(() => {
-        console.log(history);
-        console.log(location);
-        if (auth.user == null) {
-            const path =
-                location.pathname.match(/\/dashboard/) || location.pathname.match(/\/dev/)
-                    ? location.pathname
-                    : HomePath;
-            auth.init(() => history.replace(path));
-        }
-    }, []);
-    /* TODO: make loading work to fix bug */
-    if (auth.loading) {
-        // return <div>loading...</div>;
-        return <>{children}</>;
-    } else {
-        return <>{children}</>;
-    }
+/**
+ * React context provider for useAuthLoadingState and useAuthDispatch hooks.
+ *
+ * @returns {React.ReactNode} child components
+ */
+const AuthLoadingProvider: React.FC = ({ children }) => {
+    const initialAuthLoadingState: AuthLoadingState = { loading: true };
+    const [state, dispatch] = useReducer(AuthReducer, initialAuthLoadingState);
+
+    return (
+        <AuthLoadingStateContext.Provider value={state}>
+            <AuthDispatchContext.Provider value={dispatch}>{children}</AuthDispatchContext.Provider>
+        </AuthLoadingStateContext.Provider>
+    );
 };
-const auth = new Auth();
-export const AuthProvider: React.FC = ({ children }) => {
+
+/**
+ * React context provider for useAuth hook.
+ *
+ * @returns {React.ReactNode} child components
+ */
+const AuthStateProvider: React.FC = ({ children }) => {
+    const dispatch = useAuthDispatch();
+    const auth = new Auth(dispatch);
+
     return (
         <AuthContext.Provider value={auth}>
-            <AuthInitializer>{children}</AuthInitializer>
+            <AuthController>{children}</AuthController>
         </AuthContext.Provider>
+    );
+};
+
+/**
+ * Wrapper for React context providers to initialize Auth hooks. Should only be rendered once in App.tsx
+ *
+ * @returns {React.ReactNode} child components
+ */
+export const AuthProvider: React.FC = ({ children }) => {
+    return (
+        <AuthLoadingProvider>
+            <AuthStateProvider>{children}</AuthStateProvider>
+        </AuthLoadingProvider>
     );
 };
