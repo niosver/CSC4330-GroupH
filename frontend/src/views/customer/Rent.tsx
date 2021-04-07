@@ -101,7 +101,7 @@ export const Rent: React.FC = () => {
             {actionRes.response && (
                 /*Trigger ref callback if Container is rendered*/
                 <Container ref={ref}>
-                    <Title>{actionRes.response.data.transaction_id}</Title>
+                    <Title>{`Success!: Rental for bike is ready now`}</Title>
                 </Container>
             )}
             {/* TABLE WITH DOCKS */}
