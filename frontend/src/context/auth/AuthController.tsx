@@ -1,4 +1,4 @@
-import { useAuth } from 'auth';
+import { useAuth } from 'context/auth';
 import { PageSpinner } from 'components/PageSpinner';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';

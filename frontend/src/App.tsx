@@ -1,4 +1,4 @@
-import { AuthGuard, AuthProvider } from 'auth';
+import { AuthGuard, AuthProvider } from 'context/auth';
 import { PageSpinner } from 'components/PageSpinner';
 import { Landing, SignIn, SignUp } from 'pages';
 import React from 'react';

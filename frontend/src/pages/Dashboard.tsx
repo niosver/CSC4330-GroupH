@@ -13,7 +13,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { useAuth } from 'auth';
+import { useAuth } from 'context/auth';
 import clsx from 'clsx';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
