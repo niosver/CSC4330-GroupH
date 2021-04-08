@@ -66,6 +66,7 @@ const _useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         height: '100vh',
         overflow: 'auto',
+        width: '100%',
     },
     container: {
         paddingTop: theme.spacing(4),
@@ -74,7 +75,7 @@ const _useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(2),
         display: 'flex',
-        overflow: 'auto',
+        overflow: 'initial',
         flexDirection: 'column',
     },
     fixedHeight: {
