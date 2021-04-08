@@ -1,4 +1,5 @@
 import {
+    Divider,
     Drawer,
     DrawerProps,
     IconButton,
@@ -13,9 +14,11 @@ import AccountBoxRoundedIcon from '@material-ui/icons/AccountBoxRounded';
 import DirectionsBikeRoundedIcon from '@material-ui/icons/DirectionsBikeRounded';
 import HistoryRoundedIcon from '@material-ui/icons/HistoryRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
-import { Link } from 'react-router-dom';
-import { UserRole } from 'types/User';
+import { Link, useHistory } from 'react-router-dom';
+import { UserPublic, UserRole } from 'types/User';
 import { Routes } from '../Routes';
+import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded';
+import { useAuth } from 'context/auth';
 
 const navRoutes_DEV = [
     //to be deprecated
@@ -43,20 +46,25 @@ const navRoutes_DEV = [
 ];
 
 type Props = {
-    account_type: UserRole | undefined;
     classes: any;
     handleDrawerClose: () => void;
 };
 type NavDrawerProps = DrawerProps & Props;
 
 export const NavDrawer: React.FC<NavDrawerProps> = (props: NavDrawerProps) => {
-    const { account_type, classes, handleDrawerClose, ...drawerProps } = props;
+    const { classes, handleDrawerClose, ...drawerProps } = props;
+    const auth = useAuth();
+    const history = useHistory();
+    const user = auth.user
+        ? auth.user
+        : ({ username: 'undefined', account_type: UserRole.Customer } as UserPublic);
     console.log(drawerProps);
 
     /* To be deprecated and replaced with error handling */
-    const navRoutes = account_type
+    const navRoutes = user.account_type
         ? Routes.filter(
-              (route) => route.account_type === account_type || route.account_type === UserRole.Any
+              (route) =>
+                  route.account_type === user.account_type || route.account_type === UserRole.Any
           ).map(({ title, icon, path }) => ({ title, icon, path }))
         : navRoutes_DEV;
 
@@ -74,6 +82,17 @@ export const NavDrawer: React.FC<NavDrawerProps> = (props: NavDrawerProps) => {
                         <ListItemText primary={title} />
                     </ListItem>
                 ))}
+                <Divider />
+                <ListItem
+                    button
+                    key={navRoutes.length}
+                    onClick={() => auth.signOut(() => history.push('/'))}
+                >
+                    <ListItemIcon>
+                        <ExitToAppRoundedIcon />
+                    </ListItemIcon>
+                    <ListItemText color="secondary" primary="Sign Out" />
+                </ListItem>
             </List>
         </Drawer>
     );
