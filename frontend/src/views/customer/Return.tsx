@@ -2,6 +2,7 @@ import {
     Button,
     Container,
     makeStyles,
+    Paper,
     Table,
     TableBody,
     TableCell,
@@ -12,6 +13,7 @@ import {
 import { ContentSpinner } from 'components/ContentSpinner';
 import { ReturnDialog } from 'components/ReturnDialog';
 import Title from 'components/Title';
+import { useDashStyles } from 'context/styles';
 import React, { useCallback, useState } from 'react';
 import type { ActiveTransRes, DockRes, ReturnRes } from 'types/Transactions';
 import { FetchConfig, useFetch, UseFetchLifecycle } from 'UseFetch';
@@ -21,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
         background: 'white',
         color: '#3f51b5',
     },
-    paper: {
+    dialogPaper: {
         width: '80%',
         maxHeight: 435,
     },
@@ -34,7 +36,9 @@ type State = {
 };
 
 export const Return: React.FC = () => {
-    const classes = useStyles();
+    const rentStyles = useStyles();
+    const dashStyles = useDashStyles();
+    const classes = { ...dashStyles, ...rentStyles };
     /* State for selected dock and dialog open */
     const [state, setState] = useState<State>({ open: false, transaction_id: null, dock: 1 });
 
@@ -139,8 +143,8 @@ export const Return: React.FC = () => {
             )}
             {transRes.response &&
                 (transRes.response.data.active_transactions.length > 0 ? (
-                    <Container>
-                        <Title>Docks</Title>
+                    <Paper className={classes.paper}>
+                        <Title>Active Transactions</Title>
                         <Table size="small">
                             <TableHead>
                                 <TableRow>
@@ -156,7 +160,7 @@ export const Return: React.FC = () => {
                                 handleSubmit={handleSubmit}
                                 value={state.dock}
                                 keepMounted
-                                classes={{ paper: classes.paper }}
+                                classes={{ paper: classes.dialogPaper }}
                             />
                             <TableBody>
                                 {transRes.response.data.active_transactions.map((trans, idx) => (
@@ -177,7 +181,7 @@ export const Return: React.FC = () => {
                                 ))}
                             </TableBody>
                         </Table>
-                    </Container>
+                    </Paper>
                 ) : (
                     <Title>You currently have no active bike rentals</Title>
                 ))}

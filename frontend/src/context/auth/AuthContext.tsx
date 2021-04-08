@@ -1,5 +1,5 @@
 import React, { createContext } from 'react';
-import { IAuth } from 'auth';
+import { IAuth } from 'context/auth';
 import { AuthAction, AuthLoadingState } from 'types/Auth';
 import type { Dispatch } from 'react';
 /**

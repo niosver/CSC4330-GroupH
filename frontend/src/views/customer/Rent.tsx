@@ -2,6 +2,7 @@ import {
     Button,
     Container,
     makeStyles,
+    Paper,
     Table,
     TableBody,
     TableCell,
@@ -12,6 +13,7 @@ import {
 import { ContentSpinner } from 'components/ContentSpinner';
 import { RentDialog } from 'components/RentDialog';
 import Title from 'components/Title';
+import { useDashStyles } from 'context/styles';
 import React, { useCallback, useRef, useState } from 'react';
 import type { DockRes, RentRes } from 'types/Transactions';
 import { FetchConfig, useFetch, UseFetchLifecycle } from 'UseFetch';
@@ -32,7 +34,9 @@ type State = {
 };
 
 export const Rent: React.FC = () => {
-    const classes = useStyles();
+    const rentStyles = useStyles();
+    const dashStyles = useDashStyles();
+    const classes = { ...dashStyles, ...rentStyles };
 
     /* State for selected dock and dialog open */
     const [state, setState] = useState<State>({ open: false, dock: 0 });
@@ -123,8 +127,8 @@ export const Rent: React.FC = () => {
                 </Container>
             )}
             {dockRes.response && (
-                <Container>
-                    <Title>Docks</Title>
+                <Paper className={classes.paper}>
+                    <Title>Available Rentals</Title>
                     <Table size="small">
                         <TableHead>
                             <TableRow>
@@ -158,7 +162,7 @@ export const Rent: React.FC = () => {
                             ))}
                         </TableBody>
                     </Table>
-                </Container>
+                </Paper>
             )}
         </>
     );

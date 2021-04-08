@@ -1,4 +1,4 @@
-import { useAuth } from 'auth/AuthContext';
+import { useAuth } from 'context/auth/AuthContext';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { UserPublic } from 'types/User';
