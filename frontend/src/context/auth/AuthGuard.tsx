@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { useAuth } from 'auth';
+import { useAuth } from 'context/auth';
 import { UserRole } from 'types/User';
 
 type AuthGuardProps = {

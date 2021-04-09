@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAuth } from 'auth';
+import { useAuth } from 'context/auth';
 import { SignInForm } from 'components/forms';
 import React from 'react';
 import { useForm, UseFormMethods } from 'react-hook-form';
