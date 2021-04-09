@@ -1,6 +1,6 @@
 import { Container, List, ListItem, makeStyles, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { NavBar } from '../components/NavBar';
+import Header from '../components/Header';
 import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
@@ -11,11 +11,19 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'flex start',
     },
 }));
+
+const sections = [
+    { title: 'About us', url: '#'},
+    { title: 'Locations', url: '#' },
+    { title: 'Contact Us', url: '#' },
+];
+
+
 export const Landing: React.FC = () => {
     const classes = useStyles();
     return (
         <>
-            <NavBar />
+            <Header title="BikeApp" sections={sections}/>
             <Container className={classes.paper}>
                 <Typography variant="h1">Bike App</Typography>
                 <Typography variant="body1">
@@ -23,14 +31,6 @@ export const Landing: React.FC = () => {
                     repellat numquam. Quae rerum minima fugit ab consequuntur corporis fugiat
                     tempore, beatae quidem dignissimos est necessitatibus? Ex, dolores quam!
                 </Typography>
-                <List>
-                    <ListItem button component={Link} to="/signin">
-                        Sign-in
-                    </ListItem>
-                    <ListItem button component={Link} to="/signup">
-                        Sign-up
-                    </ListItem>
-                </List>
             </Container>
         </>
     );

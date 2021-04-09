@@ -9,7 +9,6 @@ import { Dashboard } from './pages/Dashboard';
 import { Routes } from './Routes';
 import { Transaction } from './views/customer';
 import { Docks } from './views/customer/Docks';
-import { Report } from './pages/Report';
 
 const App: React.FC = () => {
     Routes.forEach((route) => console.log(route.path));
