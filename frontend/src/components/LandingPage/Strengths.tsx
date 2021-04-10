@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import strengths_img from '../../assets/strengths_img.png';
 
 const useStyles = makeStyles((theme) => ({
     '@global': {
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
-        backgroundImage: `url(https://media.discordapp.net/attachments/805944888121098311/830457397985673256/pexels-photo-5914907.png?width=1025&height=683)`,
+        backgroundImage: `url(${strengths_img})`,
         marginBottom: theme.spacing(5),
     },
     heroContent: {

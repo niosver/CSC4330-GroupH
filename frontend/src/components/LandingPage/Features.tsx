@@ -10,6 +10,8 @@ import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+import feature_img from '../../assets/feature_img.png';
+
 const useStyles = makeStyles((theme) => ({
     '@global': {
         ul: {
@@ -22,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
-        backgroundImage: `url(https://cdn.discordapp.com/attachments/805944888121098311/830458595179102218/pexels-photo-5465176.png)`,
+        backgroundImage: `url(${feature_img})`,
         marginBottom: theme.spacing(5),
     },
     heroContent: {
@@ -59,6 +61,7 @@ const strengths = [
 
 export default function Strengths() {
     const classes = useStyles();
+    console.log(feature_img);
     return (
         <React.Fragment>
             <CssBaseline />

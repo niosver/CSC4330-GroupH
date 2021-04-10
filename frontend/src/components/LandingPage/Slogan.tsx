@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
+import slogan_img from '../../assets/slogan_img.jpeg';
 
 const useStyles = makeStyles((theme) => ({
     mainFeaturedPost: {
@@ -16,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
+        backgroundImage: `url(${slogan_img})`,
     },
     overlay: {
         position: 'absolute',
@@ -35,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
     },
     button: {
         color: 'white',
-        backgroundColor: 'black'
-    }
+        backgroundColor: 'black',
+    },
 }));
 
 MainFeaturedPost.propTypes = {
@@ -48,10 +50,7 @@ export default function MainFeaturedPost(props: { post: any }) {
     const { post } = props;
 
     return (
-        <Paper
-            className={classes.mainFeaturedPost}
-            style={{ backgroundImage: `url(${post.image})` }}
-        >
+        <Paper className={classes.mainFeaturedPost} style={{}}>
             {/* Increase the priority of the hero background image */}
             <div className={classes.overlay} />
             <Grid container>
@@ -64,7 +63,7 @@ export default function MainFeaturedPost(props: { post: any }) {
                             {post.description}
                         </Typography>
                         <Button className={classes.button} href="#">
-                                {post.linkText}
+                            {post.linkText}
                         </Button>
                     </div>
                 </Grid>
