@@ -28,6 +28,10 @@ const useStyles = makeStyles((theme) => ({
     heroContent: {
         padding: theme.spacing(6, 0, 6),
     },
+    card: {
+        opacity: '.7',
+        width: '23vw',
+    },
     cardContent: {
         display: 'flex',
         justifyContent: 'center',
@@ -37,22 +41,15 @@ const useStyles = makeStyles((theme) => ({
     sectionTitle: {
         color: 'white',
     },
-    gridSize: {
-        width: '75%',
-    },
 }));
 
 const strengths = [
     {
-        feature: '10 Docks with 3 bikes',
+        feature: '10 Docks with 3 bikes each',
         description: ["Description of feature and why it's special"],
     },
     {
         feature: '30 bikes to choose from',
-        description: ["Description of feature and why it's special"],
-    },
-    {
-        feature: 'x years of experience',
         description: ["Description of feature and why it's special"],
     },
 ];
@@ -70,11 +67,12 @@ export default function Strengths() {
                     </Typography>
                 </Container>
                 {/* End hero unit */}
-                <Grid container spacing={10} alignItems="flex-end">
+                <Container maxWidth="md" component="main">
+                <Grid container spacing={10} alignItems='flex-end'>
                     {strengths.map((strength) => (
                         // Enterprise card is full width at sm breakpoint
-                        <Grid item key={strength.feature} xs={12} sm={6} md={4}>
-                            <Card>
+                        <Grid item key={strength.feature} xs={12} sm={6} md={6}>
+                            <Card className={classes.card}>
                                 <CardHeader />
                                 <CardContent>
                                     <div className={classes.cardContent}>
@@ -92,6 +90,7 @@ export default function Strengths() {
                         </Grid>
                     ))}
                 </Grid>
+                </Container>
             </Paper>
         </React.Fragment>
     );

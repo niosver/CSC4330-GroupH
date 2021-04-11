@@ -28,8 +28,8 @@ const useStyles = makeStyles((theme) => ({
     heroContent: {
         padding: theme.spacing(6, 0, 6),
     },
-    cardHeader: {
-        backgroundColor: theme.palette.grey[200],
+    card: {
+        opacity: '.7'
     },
     cardContent: {
         display: 'flex',
@@ -77,17 +77,16 @@ export default function Strengths() {
                     <Typography className={classes.sectionTitle} align="center" variant="h3">
                         What makes us special?
                     </Typography>
-                </Container>
+                </Container >
                 {/* End hero unit */}
                 <Grid container spacing={5} alignItems="flex-end">
                     {strengths.map((strength) => (
                         // Enterprise card is full width at sm breakpoint
-                        <Grid item key={strength.title} xs={12} md={4}>
-                            <Card>
+                        <Grid item key={strength.title} xs={12} sm={6} md={4}>
+                            <Card className={classes.card}>
                                 <CardHeader
                                     title={strength.title}
                                     titleTypographyProps={{ align: 'center' }}
-                                    className={classes.cardHeader}
                                 />
                                 <CardContent>
                                     <div className={classes.cardContent}>
