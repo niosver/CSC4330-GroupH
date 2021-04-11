@@ -192,4 +192,21 @@ router.get("/active_transactions", async function (req,res,next) {
 	}
 });
 
+const get_last_hour = "SELECT damage_fee,start_date,end_date,origin_dock,destination_dock FROM Transaction WHERE end_date >= curdate() - INTERVAL 1 HOUR;";
+router.get("/recent_returns", async function (req,res,next) {
+	let db = req.app.locals.db;
+	try {
+		if(!(req.session.account_type == Account_Type.manager)) {
+			res.status(400).send("Please login as a manager");
+			return next();
+		}
+		let result = await db.query(get_last_hour);
+		res.status(200).send(result);
+		
+	} catch (error) {
+		res.status(400).send("Unable to process request.");
+		Logger.log(error, Logger.ERROR);
+	}
+});
+
 export default router;
