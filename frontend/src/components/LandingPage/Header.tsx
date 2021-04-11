@@ -5,9 +5,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import DirectionsBikeTwoToneIcon from '@material-ui/icons/DirectionsBikeTwoTone';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 import logo from '../../assets/logo.png';
-import { SignInPath, SignUpPath } from '../../Routes';
-import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -39,7 +38,6 @@ Header.propTypes = {
 
 export default function Header(props: { sections: any; title: any }) {
     const classes = useStyles();
-
     const { sections, title } = props;
 
     return (
@@ -59,22 +57,10 @@ export default function Header(props: { sections: any; title: any }) {
                 >
                     {title}
                 </Typography>
-                <Button
-                    className={classes.button}
-                    variant="outlined"
-                    size="small"
-                    component={Link}
-                    to={SignInPath}
-                >
+                <Button className={classes.button} variant="outlined" size="small">
                     Sign in
                 </Button>
-                <Button
-                    className={classes.button}
-                    variant="outlined"
-                    size="small"
-                    component={Link}
-                    to={SignUpPath}
-                >
+                <Button className={classes.button} variant="outlined" size="small">
                     Sign up
                 </Button>
             </Toolbar>

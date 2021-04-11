@@ -86,5 +86,3 @@ export const Routes = [
     },
 ];
 export const HomePath = '/dashboard/home';
-export const SignUpPath = '/signup';
-export const SignInPath = '/signin';
