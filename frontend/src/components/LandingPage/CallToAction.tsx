@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { SignUpPath } from 'Routes';
 import strengths_img from '../../assets/strengths_img.png';
-import footer from '../../assets/footer.jpg';
 const useStyles = makeStyles((theme) => ({
     mainFeaturedPost: {
         position: 'relative',
@@ -21,13 +20,6 @@ const useStyles = makeStyles((theme) => ({
         backgroundImage: `url(${strengths_img})`,
         height: '50vh',
         marginBottom: '0vh',
-    },
-    footer: {
-        height: '10vh',
-        backgroundImage: `url(${footer})`,
-        backgroundPosition: '50%',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
     },
     overlay: {
         backgroundColor: 'rgba(0,0,0,.6)',
