@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
             listStyle: 'none',
         },
     },
+    main: {
+        paddingBottom: theme.spacing(16),
+    },
     link: {
         margin: theme.spacing(1, 1.5),
     },
@@ -83,7 +86,7 @@ export default function Pricing() {
                 </Typography>
             </Container>
             {/* End hero unit */}
-            <Container maxWidth="md" component="main">
+            <Container maxWidth="md" component="main" className={classes.main}>
                 <Grid container spacing={5} alignItems="flex-end">
                     {pricing.map((pricing) => (
                         // Enterprise card is full width at sm breakpoint
@@ -106,7 +109,8 @@ export default function Pricing() {
                         </Grid>
                     ))}
                 </Grid>
-                <Container>
+                {/* could implement popup for fine print; otherwise removed */}
+                {/* <Container>
                     <Grid>
                         {fees.map((fees) => (
                             <Grid item>
@@ -129,7 +133,7 @@ export default function Pricing() {
                             </Grid>
                         ))}
                     </Grid>
-                </Container>
+                </Container> */}
             </Container>
         </React.Fragment>
     );
