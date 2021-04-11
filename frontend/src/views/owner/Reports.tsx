@@ -16,7 +16,7 @@ import Title from 'components/Title';
 import { useDashStyles } from 'context/styles';
 import React, { useCallback, useRef, useState } from 'react';
 import { Report } from 'types/Report';
-import { FetchConfig, useFetch, UseFetchLifecycle, UseFetchResponse } from 'UseFetch';
+import { FetchConfig, useFetch, UseFetchLifecycle, UseFetchResponse } from 'hooks/UseFetch';
 
 const useStyles = makeStyles((theme) => ({
     title: {
