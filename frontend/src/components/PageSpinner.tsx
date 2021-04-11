@@ -19,7 +19,7 @@ const loaderProps: LoaderProps = {
     type: 'TailSpin',
     radius: 1,
     height: '200px',
-    color: 'black',
+    color: '#3f51b5',
     width: '200px',
 };
 export const PageSpinner: React.FC = () => {

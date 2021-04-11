@@ -5,7 +5,7 @@ axios.interceptors.request.use(
     (config: AxiosRequestConfig) => {
         if (process.env.NODE_ENV == 'development') {
             console.log(config);
-            return new Promise((resolve) => setTimeout(() => resolve(config), 0)); // simulate 1 second response delay
+            return new Promise((resolve) => setTimeout(() => resolve(config), 1000)); // simulate 1 second response delay
         }
         return config;
     },
