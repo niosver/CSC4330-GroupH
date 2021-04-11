@@ -10,36 +10,47 @@ import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import strengths_img from '../../assets/strengths_img.png';
+import FlashOnRoundedIcon from '@material-ui/icons/FlashOnRounded';
+import SecurityRoundedIcon from '@material-ui/icons/SecurityRounded';
+import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
+import { Avatar } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
-    '@global': {
-        ul: {
-            margin: 0,
-            padding: 0,
-            listStyle: 'none',
-        },
-    },
     paper: {
         position: 'relative',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundImage: `url(${strengths_img})`,
-        marginBottom: theme.spacing(5),
+        // backgroundSize: 'cover',
+        // backgroundRepeat: 'no-repeat',
+        // backgroundImage: `url(${strengths_img})`,
+        //spacing(top, right, bottom, left )
+        padding: theme.spacing(4, 0, 4, 0),
     },
     heroContent: {
         padding: theme.spacing(6, 0, 6),
     },
     cardHeader: {
-        backgroundColor: theme.palette.grey[200],
+        display: 'flex',
+        justifyContent: 'center',
+        transform: 'scale(0.8)',
+    },
+    cardTitle: {
+        paddingLeft: theme.spacing(1),
+    },
+    cardRoot: {
+        transform: 'scale(0.8)',
+        backgroundColor: 'transparent',
     },
     cardContent: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'baseline',
-        marginBottom: theme.spacing(4),
+        // marginBottom: theme.spacing(1),
+        transform: 'scale(0.9)',
     },
     sectionTitle: {
         color: 'white',
+    },
+    container: {
+        flexGrow: 1,
     },
 }));
 
@@ -51,19 +62,22 @@ const useStyles = makeStyles((theme) => ({
 
 const strengths = [
     {
-        title: 'Strength 1',
-        attribute: 'Attribute 1',
-        description: ["Description of attribute and why it's special"],
+        title: ' Instant Booking',
+        description:
+            'Guaranteed reservations in the time and place you need it. Get instant confirmation of your bike.',
+        icon: FlashOnRoundedIcon,
     },
     {
-        title: 'Strength 2',
-        attribute: 'Attribute 2',
-        description: ["Description of attribute and why it's special"],
+        title: 'Competitive Rates',
+        description:
+            'We keep track of our competitors to make sure you get the best rate for bikes in our area.',
+        icon: MonetizationOnRoundedIcon,
     },
     {
-        title: 'Strength 3',
-        attribute: 'Attribute 3',
-        description: ["Description of attribute and why it's special"],
+        title: ' Safe & Secure',
+        description:
+            'We qualify and only work with the best bike stores in the nation. Easy secure online check-out.',
+        icon: SecurityRoundedIcon,
     },
 ];
 
@@ -72,48 +86,49 @@ export default function Strengths() {
     return (
         <React.Fragment>
             <CssBaseline />
-            {/* Hero unit */}
-            <Paper className={classes.paper}>
-                <Container maxWidth="sm" component="main" className={classes.heroContent}>
+            <div className={classes.paper}>
+                {/* Hero unit */}
+                {/* <Container maxWidth="sm" component="main" className={classes.heroContent}>
                     <Typography className={classes.sectionTitle} align="center" variant="h3">
                         What makes us special?
                     </Typography>
-                </Container>
+                </Container> */}
                 {/* End hero unit */}
-                <Grid container spacing={5} alignItems="flex-end">
+                <Grid
+                    container
+                    className={classes.container}
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
+                >
                     {strengths.map((strength) => (
                         // Enterprise card is full width at sm breakpoint
-                        <Grid item key={strength.title} xs={12} md={4}>
-                            <Card>
+                        <Grid item key={strength.title} xs={3} md={3} lg={3}>
+                            <Card elevation={0} className={classes.cardRoot}>
                                 <CardHeader
-                                    title={strength.title}
-                                    titleTypographyProps={{ align: 'center' }}
-                                    className={classes.cardHeader}
-                                />
-                                <CardContent>
-                                    <div className={classes.cardContent}>
-                                        <Typography component="h2" variant="h3" color="textPrimary">
-                                            {strength.attribute}
-                                        </Typography>
-                                    </div>
-                                    <ul>
-                                        {strength.description.map((line) => (
+                                    title={
+                                        <div className={classes.cardHeader}>
+                                            <strength.icon fontSize="large" />
                                             <Typography
-                                                component="li"
-                                                variant="subtitle1"
+                                                variant="h4"
                                                 align="center"
-                                                key={line}
+                                                className={classes.cardTitle}
                                             >
-                                                {line}
+                                                {strength.title}
                                             </Typography>
-                                        ))}
-                                    </ul>
+                                        </div>
+                                    }
+                                ></CardHeader>
+                                <CardContent className={classes.cardContent}>
+                                    <Typography variant="h5" align="center">
+                                        {strength.description}
+                                    </Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
                     ))}
                 </Grid>
-            </Paper>
+            </div>
         </React.Fragment>
     );
 }

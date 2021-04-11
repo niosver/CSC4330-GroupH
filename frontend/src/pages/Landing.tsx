@@ -25,8 +25,8 @@ const sections = [
 ];
 
 const slogan = {
-    title: 'Bike App slogan would go here',
-    description: 'Bike Application call to action goes here',
+    title: 'Go the extra mile',
+    description: 'Ride safe. Ride comfortable. Ride confident.',
     imgText: 'main image description',
     linkText: 'Sign up today',
 };
