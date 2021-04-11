@@ -19,11 +19,11 @@ const useStyles = makeStyles((theme) => ({
       overflowX: 'auto',
     },
     toolbarLink: {
-      padding: theme.spacing(1),
+      padding: theme.spacing(),
       flexShrink: 0,
     },
     button: {
-        margin: 8
+        margin: 3
     }
   }));
 

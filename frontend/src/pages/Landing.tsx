@@ -5,6 +5,8 @@ import Slogan from '../components/LandingPage/Slogan'
 import Strengths from '../components/LandingPage/Strengths'
 import Features from '../components/LandingPage/Features'
 import Testimonials from '../components/LandingPage/Testimonials'
+import Owner from '../components/LandingPage/Owner'
+import CallToAction from '../components/LandingPage/CallToAction'
 import Pricing from '../components/LandingPage/Pricing'
 import MeetTeam from '../components/LandingPage/MeetTeam'
 import React from 'react';
@@ -42,9 +44,12 @@ export const Landing: React.FC = () => {
             <Slogan post={slogan} />
             <Strengths />
             <Features />
-            <Testimonials />
+            {/* <Testimonials /> */}
+
             <Pricing />
             <MeetTeam />
+            {/* <Owner /> */}
+            <CallToAction />
         </>
     );
 };
