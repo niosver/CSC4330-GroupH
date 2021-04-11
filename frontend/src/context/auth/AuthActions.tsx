@@ -11,7 +11,7 @@ export const beginLoading = (dispatch: Dispatch<AuthAction>) => {
     dispatch({ type: AuthActionType.BEGIN_LOADING });
 };
 
-const MINIMUM_LOADING_TIME = 0; // minimum loading time for smooth transition
+const MINIMUM_LOADING_TIME = 200; // minimum loading time for smooth transition
 
 /**
  * Wrapper for dispatching change in AuthLoadingState setting loading to false.

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import type { UserCreation, UserLogin, UserPublic } from 'types/User';
-import type { FetchConfig } from 'hooks/UseFetch';
+import type { FetchConfig } from 'UseFetch';
 import { beginLoading, endLoading } from './AuthActions';
 
 /** Interface for authentication object
