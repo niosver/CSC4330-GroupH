@@ -13,8 +13,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import React, { useEffect } from 'react';
 import Title from '../../components/Title';
-import { useFetch, UseFetchLifecycle } from '../../UseFetch';
-import type { FetchConfig } from '../../UseFetch';
+import { useFetch, UseFetchLifecycle } from '../../hooks/UseFetch';
+import type { FetchConfig } from '../../hooks/UseFetch';
 
 // Generate Order Data
 function createData(id: number, dockNumber: number, address: string, bikesAvailable: number) {

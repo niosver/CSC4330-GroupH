@@ -11,7 +11,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import React, { useRef, useState } from 'react';
 import { DockRes } from 'types/Transactions';
-import { UseFetchResponse } from 'UseFetch';
+import { UseFetchResponse } from 'hooks/UseFetch';
 import { ContentSpinner } from './ContentSpinner';
 
 type Props = {
