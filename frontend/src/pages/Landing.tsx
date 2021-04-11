@@ -19,6 +19,20 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'flex start',
     },
 }));
+
+const sections = [
+    { title: 'About us', url: '#' },
+    { title: 'Locations', url: '#' },
+    { title: 'Contact Us', url: '#' },
+];
+
+const slogan = {
+    title: 'Go the extra mile',
+    description: 'Ride safe. Ride comfortable. Ride confident.',
+    imgText: 'main image description',
+    linkText: 'Sign up today',
+};
+
 export const Landing: React.FC = () => {
     const classes = useStyles();
     return (
