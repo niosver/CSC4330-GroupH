@@ -1,4 +1,5 @@
 import {
+    Avatar,
     Divider,
     Drawer,
     DrawerProps,
@@ -7,6 +8,8 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
+    makeStyles,
+    Typography,
 } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import React from 'react';
@@ -19,6 +22,7 @@ import { UserPublic, UserRole } from 'types/User';
 import { Routes } from '../Routes';
 import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded';
 import { useAuth } from 'context/auth';
+import { useDashStyles } from 'context/styles';
 
 const navRoutes_DEV = [
     //to be deprecated
@@ -44,6 +48,15 @@ const navRoutes_DEV = [
         path: '/dev/dashboard/docks',
     },
 ];
+const useStyles = makeStyles((theme) => ({
+    small: {
+        width: theme.spacing(3.5),
+        height: theme.spacing(3.5),
+    },
+    avatar: {
+        paddingLeft: theme.spacing(1.1),
+    },
+}));
 
 type Props = {
     classes: any;
@@ -52,7 +65,9 @@ type Props = {
 type NavDrawerProps = DrawerProps & Props;
 
 export const NavDrawer: React.FC<NavDrawerProps> = (props: NavDrawerProps) => {
-    const { classes, handleDrawerClose, ...drawerProps } = props;
+    const { handleDrawerClose, classes: dashStyles, ...drawerProps } = props;
+    const navDrawerStyles = useStyles();
+    const classes = { ...dashStyles, ...navDrawerStyles };
     const auth = useAuth();
     const history = useHistory();
     const user = auth.user
@@ -71,10 +86,24 @@ export const NavDrawer: React.FC<NavDrawerProps> = (props: NavDrawerProps) => {
     return (
         <Drawer {...drawerProps} classes={{ paper: classes.paper }}>
             <div className={classes.toolbarIcon}>
+                {/* <div className={classes.avatar}>
+                    <Avatar className={classes.small}>{user.username[0]}</Avatar>
+                </div> */}
+                <List>
+                    <ListItem className={classes.avatar}>
+                        <ListItemIcon>
+                            <Avatar className={classes.small}>{user.username[0]}</Avatar>
+                        </ListItemIcon>
+                        <ListItemText primary={user.username} />
+                    </ListItem>
+                </List>
+
                 <IconButton onClick={handleDrawerClose}>
                     <ChevronLeftIcon />
                 </IconButton>
             </div>
+            <Divider />
+
             <List>
                 {navRoutes.map(({ title, icon, path }, idx) => (
                     <ListItem button key={idx} component={Link} to={path}>
