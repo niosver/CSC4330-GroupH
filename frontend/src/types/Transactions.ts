@@ -26,5 +26,16 @@ export type DockRes = {
 };
 /* Current Transactions */
 export type ActiveTransReq = {};
-type Transaction = { transaction_id: number; origin_dock: number; start_date: Date };
-export type ActiveTransRes = { active_transactions: Transaction[] };
+type ActiveTransaction = { transaction_id: number; origin_dock: number; start_date: Date };
+export type ActiveTransRes = { active_transactions: ActiveTransaction[] };
+
+export type CompleteTransReq = {};
+type CompleteTransaction = {
+    origin_dock: number;
+    destination_dock: number;
+    start_date: Date;
+    end_date: Date;
+    damage_fee: number;
+    price: number;
+};
+export type CompleteTransRes = { complete_transactions: CompleteTransaction[] };
