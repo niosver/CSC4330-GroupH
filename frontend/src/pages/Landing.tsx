@@ -37,7 +37,7 @@ export const Landing: React.FC = () => {
     const classes = useStyles();
     return (
         <>
-            <Header title="BikeApp" sections={sections} />
+            <Header title="Bicycle Shop" sections={sections} />
             <Slogan post={slogan} />
             <Strengths />
             <Features />
