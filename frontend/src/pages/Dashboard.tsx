@@ -50,7 +50,7 @@ export const Dashboard: React.FC = ({ children }) => {
                         noWrap
                         className={classes.title}
                     >
-                        Dashboard
+                        Bicycle Shop
                     </Typography>
                     {/* <IconButton color="inherit">
                         <Badge badgeContent={1} color="secondary">

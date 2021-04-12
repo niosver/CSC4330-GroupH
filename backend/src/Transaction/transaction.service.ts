@@ -16,7 +16,9 @@ const update_trans =
 const add_fee = "UPDATE Transaction SET damage_fee=? WHERE transaction_id=?;";
 const lookup_trans =
 	'SELECT * FROM Transaction WHERE transaction_id=? AND customer_id=? AND status="in_progress";';
-const get_trans = 'SELECT * FROM Transaction WHERE customer_id=? AND status="in_progress";';
+const get_active_trans = 'SELECT * FROM Transaction WHERE customer_id=? AND status="in_progress";';
+const get_complete_trans = 'SELECT * FROM Transaction WHERE customer_id=? AND status="complete";';
+
 const get_bike_number = "SELECT * FROM BikeDock WHERE bike_dock_number=?;";
 const insert_bike_number = "UPDATE BikeDock SET number_of_bikes=? WHERE bike_dock_number=?;";
 
@@ -157,12 +159,56 @@ router.get("/active_transactions", async function (req, res, next) {
 	let list: TransRes[] = [];
 	try {
 		if (req.session.customer_id) {
-			let result = await db.query(get_trans, [req.session.customer_id]);
-			for (var i = 0; i < result.length; i++) {
+			let result = await db.query(get_active_trans, [req.session.customer_id]);
+			for (let i = 0; i < result.length; i++) {
 				const { transaction_id, origin_dock, start_date } = result[i];
 				list.push({ transaction_id, origin_dock, start_date });
 			}
 			res.status(200).send({ active_transactions: list });
+		} else {
+			res.status(400).send("Unable to determine customer_id, are you logged it?");
+			return next();
+		}
+	} catch (error) {
+		res.status(400).send("Unable to process request");
+		Logger.log(error, Logger.ERROR);
+	}
+});
+router.get("/complete_transactions", async function (req, res, next) {
+	let db = req.app.locals.db;
+	type TransRes = {
+		origin_dock: number;
+		destination_dock: number;
+		start_date: Date;
+		end_date: Date;
+		damage_fee: number;
+		price: number;
+	};
+	let list: TransRes[] = [];
+	try {
+		if (req.session.customer_id) {
+			let result = await db.query(get_complete_trans, [req.session.customer_id]);
+			for (let i = 0; i < result.length; i++) {
+				const {
+					origin_dock,
+					destination_dock,
+					start_date,
+					end_date,
+
+					price,
+				} = result[i];
+				let { damage_fee } = result[i];
+				damage_fee = damage_fee ? damage_fee : 0;
+				list.push({
+					origin_dock,
+					destination_dock,
+					start_date,
+					end_date,
+					damage_fee,
+					price,
+				});
+			}
+			res.status(200).send({ complete_transactions: list });
 		} else {
 			res.status(400).send("Unable to determine customer_id, are you logged it?");
 			return next();

@@ -17,6 +17,8 @@ import { useDashStyles } from 'context/styles';
 import React, { useCallback, useState } from 'react';
 import type { ActiveTransRes, DockRes, ReturnRes } from 'types/Transactions';
 import { FetchConfig, useFetch, UseFetchLifecycle } from 'hooks/UseFetch';
+import { Alert } from 'components/Alert';
+import { formatDate } from '../../util';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -26,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
     dialogPaper: {
         width: '80%',
         maxHeight: 435,
+    },
+    title: {
+        textAlign: 'center',
     },
 }));
 
@@ -111,16 +116,22 @@ export const Return: React.FC = () => {
                 </Container>
             )}
             {actionRes.error && (
-                /*Trigger ref callback if Container is rendered*/
-                <Container ref={ref}>
-                    <Title>{`${actionRes.error.response?.data} for transaction ${state.transaction_id}`}</Title>
-                </Container>
+                /*Trigger ref callback if div is rendered*/
+                <div ref={ref}>
+                    <Alert
+                        severity="error"
+                        message={`${actionRes.error.response?.data} for transaction ${state.transaction_id}`}
+                    />
+                </div>
             )}
             {actionRes.response && (
-                /*Trigger ref callback if Container is rendered*/
-                <Container ref={ref}>
-                    <Title>{`Total Cost: $${actionRes.response.data.price}`}</Title>
-                </Container>
+                /*Trigger ref callback if div is rendered*/
+                <div ref={ref}>
+                    <Alert
+                        severity="success"
+                        message={`Total Cost: $${actionRes.response.data.price}`}
+                    />
+                </div>
             )}
 
             {/* TABLE WITH ACTIVE TRANSACTIONS */}
@@ -167,7 +178,7 @@ export const Return: React.FC = () => {
                                     <TableRow key={idx}>
                                         <TableCell>{trans.origin_dock}</TableCell>
                                         <TableCell>
-                                            {new Date(trans.start_date).toDateString()}
+                                            {formatDate(new Date(trans.start_date))}
                                         </TableCell>
                                         <TableCell>
                                             <Button
@@ -183,7 +194,11 @@ export const Return: React.FC = () => {
                         </Table>
                     </Paper>
                 ) : (
-                    <Title>You currently have no active bike rentals</Title>
+                    <Paper className={classes.paper}>
+                        <div className={classes.title}>
+                            <Title>You currently have no active bike rentals</Title>
+                        </div>
+                    </Paper>
                 ))}
         </>
     );

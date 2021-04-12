@@ -17,6 +17,7 @@ import { useDashStyles } from 'context/styles';
 import React, { useCallback, useRef, useState } from 'react';
 import type { DockRes, RentRes } from 'types/Transactions';
 import { FetchConfig, useFetch, UseFetchLifecycle } from 'hooks/UseFetch';
+import { Alert } from 'components/Alert';
 
 const useStyles = makeStyles((theme) => ({
     seeMore: {
@@ -97,16 +98,19 @@ export const Rent: React.FC = () => {
                 </Container>
             )}
             {actionRes.error && (
-                /*Trigger ref callback if Container is rendered*/
-                <Container ref={ref}>
-                    <Title>{`${actionRes.error.response?.data} for bike at dock ${state.dock}`}</Title>
-                </Container>
+                /*Trigger ref callback if div is rendered*/
+                <div ref={ref}>
+                    <Alert
+                        severity="error"
+                        message={`${actionRes.error.response?.data} for bike at dock ${state.dock}`}
+                    />
+                </div>
             )}
             {actionRes.response && (
-                /*Trigger ref callback if Container is rendered*/
-                <Container ref={ref}>
-                    <Title>{`Success!: Rental for bike is ready now`}</Title>
-                </Container>
+                /*Trigger ref callback if div is rendered*/
+                <div ref={ref}>
+                    <Alert severity="success" message="Success!: Rental for bike is ready now" />
+                </div>
             )}
             {/* TABLE WITH DOCKS */}
             {dockRes.isLoading && (

@@ -13,7 +13,7 @@ const _useStyles = makeStyles((theme) => ({
     toolbarIcon: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         padding: '0 8px',
         ...theme.mixins.toolbar,
     },
@@ -23,7 +23,7 @@ const _useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
-        backgroundColor: 'black'
+        backgroundColor: 'black',
     },
     appBarShift: {
         marginLeft: drawerWidth,
@@ -74,7 +74,7 @@ const _useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(4),
     },
     paper: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(2, 0, 2, 0),
         display: 'flex',
         overflow: 'initial',
         flexDirection: 'column',
