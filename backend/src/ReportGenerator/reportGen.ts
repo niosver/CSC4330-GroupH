@@ -26,7 +26,7 @@ export async function gen() {
 	try {
 		results = await db.query(rent_rev,[]);
 		result = results[0];
-		let report = new Report(result.rev,result.rent);
+		let report = new Report(result.rev,result.num);
 		for(var i = 1;i<=10;i++) {
 			results = await db.query(dock_info,[i]);
 			result = results[0];
