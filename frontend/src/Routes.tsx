@@ -20,23 +20,16 @@ export const Routes = [
         content: SharedView.Home,
         account_type: UserRole.Any,
     },
-    {
-        title: 'Account',
-        icon: <AccountBoxRoundedIcon />,
-        path: '/dashboard/account',
-        content: SharedView.Account,
-        account_type: UserRole.Any,
-    },
+    // {
+    //     title: 'Account',
+    //     icon: <AccountBoxRoundedIcon />,
+    //     path: '/dashboard/account',
+    //     content: SharedView.Account,
+    //     account_type: UserRole.Any,
+    // },
 
     /* Customer View */
 
-    {
-        title: 'Transactions',
-        icon: <HistoryRoundedIcon />,
-        path: '/dashboard/transactions',
-        content: CustomerView.Transaction,
-        account_type: UserRole.Customer,
-    },
     {
         title: 'Rent',
         icon: <DirectionsBikeRoundedIcon />,
@@ -51,6 +44,13 @@ export const Routes = [
         content: CustomerView.Return,
         account_type: UserRole.Customer,
     },
+    {
+        title: 'Transactions',
+        icon: <HistoryRoundedIcon />,
+        path: '/dashboard/transactions',
+        content: CustomerView.Transaction,
+        account_type: UserRole.Customer,
+    },
 
     /* Manager View */
 
@@ -63,20 +63,20 @@ export const Routes = [
     },
     /* Owner View */
 
-    {
-        title: 'Management',
-        icon: <SupervisorAccountRoundedIcon />,
-        content: OwnerView.Management,
-        path: '/dashboard/management',
-        account_type: UserRole.Owner,
-    },
-    {
-        title: 'PriceControl',
-        icon: <AttachMoneyRoundedIcon />,
-        content: OwnerView.PriceControl,
-        path: '/dashboard/pricecontrol',
-        account_type: UserRole.Owner,
-    },
+    // {
+    //     title: 'Management',
+    //     icon: <SupervisorAccountRoundedIcon />,
+    //     content: OwnerView.Management,
+    //     path: '/dashboard/management',
+    //     account_type: UserRole.Owner,
+    // },
+    // {
+    //     title: 'PriceControl',
+    //     icon: <AttachMoneyRoundedIcon />,
+    //     content: OwnerView.PriceControl,
+    //     path: '/dashboard/pricecontrol',
+    //     account_type: UserRole.Owner,
+    // },
     {
         title: 'Reports',
         icon: <AssignmentRoundedIcon />,
