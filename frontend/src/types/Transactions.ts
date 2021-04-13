@@ -4,6 +4,7 @@ export type RentReq = {
 };
 export type RentRes = {
     transaction_id: number;
+    origin_dock: number;
 };
 /* Return */
 export type ReturnReq = {
@@ -39,3 +40,13 @@ type CompleteTransaction = {
     price: number;
 };
 export type CompleteTransRes = { complete_transactions: CompleteTransaction[] };
+
+export type DamageChargeRes = { transaction_id: number; damage_fee: number };
+type RecentReturn = {
+    transaction_id: number;
+    start_date: Date;
+    end_date: Date;
+    origin_dock: number;
+    destination_dock: number;
+};
+export type RecentReturnsRes = RecentReturn[];
