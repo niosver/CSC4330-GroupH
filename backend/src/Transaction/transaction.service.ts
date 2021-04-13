@@ -12,7 +12,7 @@ const insert_trans =
 	"INSERT INTO Transaction(price,cc_number,start_date,customer_id,origin_dock,status)" +
 	"VALUES(?,?,?,?,?,?);";
 const update_trans =
-	"UPDATE Transaction SET end_date=?,price=?,destination_dock=?,status=? WHERE transaction_id=?;";
+	"UPDATE Transaction SET end_date=?,price=?,destination_dock=?,status=?,damage_fee=0 WHERE transaction_id=?;";
 const add_fee = "UPDATE Transaction SET damage_fee=? WHERE transaction_id=?;";
 const lookup_trans =
 	'SELECT * FROM Transaction WHERE transaction_id=? AND customer_id=? AND status="in_progress";';
@@ -62,7 +62,7 @@ router.post("/rent", async function (req, res, next) {
 
 		if (trans_id >= 0) {
 			db.commit();
-			res.status(200).send({ transaction_id: trans_id });
+			res.status(200).send({ transaction_id: trans_id, origin_dock: trans.origin_dock });
 		} else throw Error;
 	} catch (error) {
 		db.rollback();
@@ -141,7 +141,10 @@ router.post("/damage_charge", async function (req, res, next) {
 		}
 		if (json.damage_fee > 0 && json.damage_fee < 200) {
 			await db.query(add_fee, [json.damage_fee, json.transaction_id]);
-			res.status(200).send("OK");
+			res.status(200).send({
+				transaction_id: json.transaction_id,
+				damage_fee: json.damage_fee,
+			});
 			return next();
 		} else {
 			res.status(400).send("Error: fee above maximum");
@@ -219,17 +222,17 @@ router.get("/complete_transactions", async function (req, res, next) {
 	}
 });
 
-const get_last_hour = "SELECT damage_fee,start_date,end_date,origin_dock,destination_dock FROM Transaction WHERE end_date >= curdate() - INTERVAL 1 HOUR;";
-router.get("/recent_returns", async function (req,res,next) {
+const get_last_hour =
+	"SELECT transaction_id,start_date,end_date,origin_dock,destination_dock FROM Transaction WHERE damage_fee=0 AND end_date >= curdate() - INTERVAL 1 HOUR;";
+router.get("/recent_returns", async function (req, res, next) {
 	let db = req.app.locals.db;
 	try {
-		if(!(req.session.account_type == Account_Type.manager)) {
+		if (!(req.session.account_type == Account_Type.manager)) {
 			res.status(400).send("Please login as a manager");
 			return next();
 		}
 		let result = await db.query(get_last_hour);
 		res.status(200).send(result);
-		
 	} catch (error) {
 		res.status(400).send("Unable to process request.");
 		Logger.log(error, Logger.ERROR);
