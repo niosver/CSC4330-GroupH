@@ -108,7 +108,7 @@ developing authenticated routes requires mysql database set up in dev environmen
 
 # Pages
 
-## Dashboard (functional) (needs styling)
+## Dashboard (complete)
 
 `Dashboard.tsx` serves as a container for all authenticated users (customer, manager, owner) that renders the current "view".
 
@@ -124,15 +124,15 @@ For example, a customer logged in will see links to components in the `views/cus
 
 Currently links on `NavDrawer.tsx` are hard coded to display customer views only. Will be refactored in future to display correct links for manager and owner.
 
-## Landing (functional) (needs styling)
+## Landing (complete)
 
 Landing home page for users not signed in. Provides links to sign-in and sign-up.
 
-## SignIn (functional) (complete)
+## SignIn (complete)
 
 Sign-in page that allows customers/managers/owner to sign in to website.
 
-## SignUp (functional) (complete)
+## SignUp (needs final testing & cleanup)
 
 Sign-up page that allows customers to sign-up to website.
 
@@ -142,50 +142,52 @@ Naming and functionality of each view are subject to change. Current state of vi
 
 ## Shared
 
-### Home (not implemented)
+### Home (complete)
 
-View rendered when customer, manager, or owner first logs-in. Displays "welcome, `username`". May display summaries of other views. May be removed as redundant.
+View rendered when customer, manager, or owner first logs-in. Displays Summary for customer redirects to Reports for owner and VerifyPurchase for manager.
 
-### Account (not implemented)
+### Account (not implemented, deprecated)
 
 View that allows customer, manager, or owner to edit account information. Low priority on implementing
 
 ## Customer
 
-### Rent (functional) (needs styling)
+### Rent (complete)
 
 View that shows docks and allows customer to rent bike
 
-### Return (not functional) (needs api integration and styling)
+### Return (complete)
 
 View that shows bikes currently rented by customer and allows customer to return rented bikes
 
-### Transaction (deprecated)
+### Transaction (complete)
 
-View that currently shows confirmation for renting bike. May be refactored to show current rentals, previous rentals, outstanding fees, and/or rental due dates.
+View that shows customer transaction history
 
 ## Manager
 
-### VerifyPurchases (not implemented)
+### VerifyPurchases (implemented, needs final testing)
 
-View that allows manager to confirm a given customer paid for a bike or confirm a given customer returned a bike. May be refactored to multiple views.
+View that allows manager to add fees of completed transactions in the last hour
 
 ## Owner
 
-### PriceControl (not implemented)
+### PriceControl (not implemented, deprecated)
 
 View that allows owner to set prices at docks
 
-### Management (not implemented)
+### Management (not implemented, deprecated)
 
 View that allows owner to create/delete manager accounts
 
-### Reports (not implemented )
+### Reports (complete)
 
 View that shows weekly bike dock reports
 
 # Known Issues
 
-| Bug Description                                        | File     | Steps to Recreate                  | Possible Fix | Priority |
-| ------------------------------------------------------ | -------- | ---------------------------------- | ------------ | -------- |
-| error thrown in chrome console (no performance impact) | Rent.tsx | open modal dialog from rent button | not sure     | low      |
+| Bug Description                                    | impact   | Files                   | Steps to Recreate                             | Possible Fixes                                   | Priority |
+| -------------------------------------------------- | -------- | ----------------------- | --------------------------------------------- | ------------------------------------------------ | -------- |
+| error thrown from impure props/state in Home       | ?        | Home                    | login as customer/manager/owner               | refactor Home to return redirect link            | low      |
+| error thrown from attempting to update stats count | ?        | Features                | scroll to features and hot reload in dev mode | remove stats animation; update teardown function | low      |
+| unnecessary component re-renders                   | very low | Rent,Return,Fee,Dialogs | load rent/return/fee pages                    | debug component mounting                         | low      |
