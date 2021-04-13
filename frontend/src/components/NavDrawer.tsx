@@ -73,7 +73,6 @@ export const NavDrawer: React.FC<NavDrawerProps> = (props: NavDrawerProps) => {
     const user = auth.user
         ? auth.user
         : ({ username: 'undefined', account_type: UserRole.Customer } as UserPublic);
-    console.log(drawerProps);
 
     /* To be deprecated and replaced with error handling */
     const navRoutes = user.account_type

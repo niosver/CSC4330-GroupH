@@ -76,14 +76,10 @@ export default function Strengths() {
     const inViewport = useIntersection(ref);
 
     useEffect(() => {
-        console.log('viewport: ', inViewport);
         if (inViewport) {
             setStart(true);
         }
     }, [inViewport]);
-    useEffect(() => {
-        console.log('start: ', start);
-    }, [start]);
     return (
         <React.Fragment>
             <CssBaseline />

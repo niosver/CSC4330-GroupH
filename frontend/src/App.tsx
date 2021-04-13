@@ -11,7 +11,6 @@ import { Transaction } from './views/customer';
 import { Docks } from './views/customer/Docks';
 
 const App: React.FC = () => {
-    Routes.forEach((route) => console.log(route.path));
     return (
         <Router>
             <AuthProvider>

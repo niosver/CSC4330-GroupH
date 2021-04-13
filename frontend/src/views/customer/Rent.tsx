@@ -109,7 +109,10 @@ export const Rent: React.FC = () => {
             {actionRes.response && (
                 /*Trigger ref callback if div is rendered*/
                 <div ref={ref}>
-                    <Alert severity="success" message="Success!: Rental for bike is ready now" />
+                    <Alert
+                        severity="success"
+                        message={`Success: Rental for bike at dock ${actionRes.response.data.origin_dock} is ready now`}
+                    />
                 </div>
             )}
             {/* TABLE WITH DOCKS */}
