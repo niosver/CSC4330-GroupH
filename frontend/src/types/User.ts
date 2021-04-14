@@ -26,7 +26,7 @@ export const userSchema = z.object({
         .string()
         .regex(phoneRegex)
         .transform(z.number(), (str) => parseInt(str, 10)),
-    cc_number: z.string().transform(z.number(), (str) => parseInt(str, 10)), // validation might be too complex
+    cc_number: z.string().transform(z.number().min(16), (str) => parseInt(str, 10)), // validation might be too complex
     cc_name: z.string(),
     billing_address: z.string(),
 });
