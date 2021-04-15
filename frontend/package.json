@@ -34,7 +34,8 @@
         "eject": "react-scripts eject",
         "format": "prettier --write src/**/*.ts{,x}",
         "lint": "eslint --fix src/**/*.ts{,x}",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit",
+        "prod": "serve build"
     },
     "proxy": "http://localhost:8000",
     "browserslist": {
