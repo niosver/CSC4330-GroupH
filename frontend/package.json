@@ -23,6 +23,7 @@
         "react-loader-spinner": "^4.0.0",
         "react-router-dom": "^5.2.0",
         "react-scripts": "4.0.2",
+        "serve": "^11.3.2",
         "typescript": "^4.1.5",
         "web-vitals": "^1.1.0",
         "zod": "^2.0.0-beta.30"
@@ -34,7 +35,8 @@
         "eject": "react-scripts eject",
         "format": "prettier --write src/**/*.ts{,x}",
         "lint": "eslint --fix src/**/*.ts{,x}",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit",
+        "prod": "serve build"
     },
     "proxy": "http://localhost:8000",
     "browserslist": {

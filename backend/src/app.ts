@@ -10,7 +10,8 @@ import docks from "./Dock/dock.service";
 import session from "express-session";
 import { Logger, RequestLogger } from "./Logger";
 import bodyParser from "body-parser";
-import {gen} from "./ReportGenerator/reportGen"
+import { gen } from "./ReportGenerator/reportGen";
+import path from "path";
 declare module "express-session" {
 	export interface SessionData {
 		username: string;
@@ -23,6 +24,12 @@ declare module "express-session" {
 dotenv.config();
 const app = express();
 const TWO_HOURS = 1000 * 60 * 60 * 2;
+if (process.env.PRODUCTION) {
+	const frontend = path.resolve(__dirname, "../../frontend/build");
+	Logger.log("Server running in production");
+	Logger.log(`Frontend build: ${frontend}`);
+	app.use(express.static(frontend));
+}
 
 /* Applies logger middleware to routes */
 app.use(RequestLogger());
@@ -66,11 +73,11 @@ app.locals.db = db;
 // setInterval(async () => {
 // 	await db.ping();
 // }, 1000);
-const WEEK = 1000 * 60 * 60 * 24 * 7
+const WEEK = 1000 * 60 * 60 * 24 * 7;
 
-setInterval(async() => {
-	await gen()
-},WEEK);
+setInterval(async () => {
+	await gen();
+}, WEEK);
 
 app.use("/api/accounts", accounts);
 
@@ -78,8 +85,8 @@ app.use("/api/customers", customers);
 
 app.use("/api/transactions", transactions);
 
-app.use("/api/docks",docks);
+app.use("/api/docks", docks);
 
-app.use("/api/reports",reports);
+app.use("/api/reports", reports);
 
 export { app };

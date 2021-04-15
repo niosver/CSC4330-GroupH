@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "ts-node src/server.ts",
 		"watch": "nodemon src/server.ts --ignore report.json",
-		"prod": "node ./dist/server.js",
+		"prod": "PRODUCTION=true node ./dist/server.js",
 		"test": "jest",
 		"build": "tsc --build",
 		"clean": "tsc --build --clean"
