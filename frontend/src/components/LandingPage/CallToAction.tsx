@@ -65,7 +65,7 @@ export default function MainFeaturedPost(props: { post: any }) {
             <div className={classes.overlay}>
                 <div className={classes.mainFeaturedPostContent}>
                     <Typography component="h1" variant="h2" color="inherit" gutterBottom>
-                        Are you ready bike?
+                        Are you ready to bike?
                     </Typography>
                     <Button
                         variant="outlined"
