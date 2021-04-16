@@ -70,9 +70,10 @@ app.locals.db = db;
 
 /* connection should be managed implicitly by mysql. 
    commenting out to test if connection times out without ping */
-// setInterval(async () => {
-// 	await db.ping();
-// }, 1000);
+setInterval(async () => {
+	await db.ping();
+}, 1000);
+
 const WEEK = 1000 * 60 * 60 * 24 * 7;
 
 setInterval(async () => {
