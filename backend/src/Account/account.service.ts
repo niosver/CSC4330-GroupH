@@ -75,7 +75,7 @@ router.post("/create_manager", async function (req, res) {
 	try {
 		let account = req.session.username;
 		let type = await db.query(check_account_type, [account]);
-		type = type[0].account_type
+		type = type[0].account_type;
 		if (type != Account_Type.manager && type != Account_Type.owner) {
 			res.status(500).send("Account does not have required permissions");
 			return;
@@ -130,10 +130,9 @@ router.post("/login", async function (req, res) {
 /* Method for client auth class to call to check if user is logged in before
    redirecting to login page. Client uses this method for customer/owner/manager
  */
-router.get("/me", async function (req, res, next) {
+router.get("/me", async function (req, res) {
 	if (!req.session.username) {
 		res.status(401).send("User not authenticated/signed-in");
-		return next();
 	} else {
 		res.status(200).send({
 			username: req.session.username,
