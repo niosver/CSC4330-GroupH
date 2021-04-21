@@ -11,6 +11,7 @@ import session from "express-session";
 import { Logger, RequestLogger } from "./Logger";
 import bodyParser from "body-parser";
 import { gen } from "./ReportGenerator/reportGen";
+import { missing} from "./Transaction/missingCheck";
 import path from "path";
 declare module "express-session" {
 	export interface SessionData {
@@ -68,10 +69,14 @@ setInterval(async () => {
 }, 1000);
 
 const WEEK = 1000 * 60 * 60 * 24 * 7;
-
+const DAY = 1000 * 60 * 60 * 24;
 setInterval(async () => {
 	await gen();
 }, WEEK);
+
+setInterval(async () => {
+	missing();
+},DAY);
 
 app.use("/api/accounts", accounts);
 
