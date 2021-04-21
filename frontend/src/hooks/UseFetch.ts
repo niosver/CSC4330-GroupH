@@ -1,16 +1,17 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import { useEffect, useRef, useState } from 'react';
+
 /* Interceptors are used as middleware for logging in development and explicitly defining data flow*/
 axios.interceptors.request.use(
     (config: AxiosRequestConfig) => {
-        if (process.env.NODE_ENV == 'development') {
+        if (process.env.NODE_ENV === 'development') {
             console.log(config);
             return new Promise((resolve) => setTimeout(() => resolve(config), 0)); // simulate 1 second response delay
         }
         return config;
     },
     (error: AxiosError) => {
-        if (process.env.NODE_ENV == 'development') {
+        if (process.env.NODE_ENV === 'development') {
             console.error(error);
         }
         throw error;
@@ -19,13 +20,13 @@ axios.interceptors.request.use(
 /* Interceptors are used as middleware for logging in development and explicitly defining data flow */
 axios.interceptors.response.use(
     (res: AxiosResponse) => {
-        if (process.env.NODE_ENV == 'development') {
+        if (process.env.NODE_ENV === 'development') {
             console.log(res);
         }
         return res;
     },
     (error: AxiosError) => {
-        if (process.env.NODE_ENV == 'development') {
+        if (process.env.NODE_ENV === 'development') {
             console.error(error);
         }
         throw error;

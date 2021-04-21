@@ -24,13 +24,6 @@ declare module "express-session" {
 dotenv.config();
 const app = express();
 const TWO_HOURS = 1000 * 60 * 60 * 2;
-if (process.env.PRODUCTION) {
-	const frontend = path.resolve(__dirname, "../../frontend/build");
-	Logger.log("Server running in production");
-	Logger.log(`Frontend build: ${frontend}`);
-	app.use(express.static(frontend));
-}
-
 /* Applies logger middleware to routes */
 app.use(RequestLogger());
 
@@ -70,9 +63,10 @@ app.locals.db = db;
 
 /* connection should be managed implicitly by mysql. 
    commenting out to test if connection times out without ping */
-// setInterval(async () => {
-// 	await db.ping();
-// }, 1000);
+setInterval(async () => {
+	await db.ping();
+}, 1000);
+
 const WEEK = 1000 * 60 * 60 * 24 * 7;
 
 setInterval(async () => {
@@ -88,5 +82,15 @@ app.use("/api/transactions", transactions);
 app.use("/api/docks", docks);
 
 app.use("/api/reports", reports);
+
+/* serve static middleware and get catch all applied last so express router middleware takes priority */
+if (process.env.PRODUCTION) {
+	const frontend = path.resolve(__dirname, "../../frontend/build");
+	Logger.log("Server running in production");
+	app.use(express.static(frontend));
+	app.get("/*", (_, res) => {
+		res.sendFile(path.join(frontend, "index.html"));
+	});
+}
 
 export { app };
