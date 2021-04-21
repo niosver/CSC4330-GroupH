@@ -38,9 +38,21 @@ export async function gen() {
 				dock = new DockReport(i,results[0].location,result.num,result.rev);
 			}
 			results = await db.query(diff_return,[i,i]);
-			dock.add_other_rent(result.num);
+			result = results[0];
+			if(result.num){
+				dock.add_other_rent(result.num);
+			}
+			else {
+				dock.add_other_rent(0);
+			}
 			results = await db.query(diff_rent,[i,i]);
-			dock.add_other_return(result.num);
+			result = results[0];
+			if(result.num) {
+				dock.add_other_return(result.num);
+			}
+			else {
+				dock.add_other_return(0);
+			}
 			report.push(dock);
 		}
 		let data = JSON.stringify(report);
